@@ -1,0 +1,43 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using System;
+
+public class ScenesScreen : SpeedImagerScreen {
+
+	public List<SpeedImagerScene> scenes = new List<SpeedImagerScene>();
+	public LayoutGroup scenesContainer; // Set in Unity Designer
+
+	// Use this for initialization
+	void Start () {
+		
+	}
+
+	public override void LoadScreen ()
+	{
+		foreach (Transform child in scenesContainer.transform)
+			GameObject.Destroy(child.gameObject);
+		for (int i = 0; i < 10; i++) // This should come from a database or http
+		{
+			SpeedImagerScene scene = new SpeedImagerScene(i + 1);
+			scene.Name = String.Format("Scene {00}", scene.ID);
+			scene.HP = (i+1) * 0.3 + 7;
+			scene.ImageChangeRate = (i+1) * 0.3 + 7;
+			scene.Turns = i;
+			scene.TurnDuration = 5;
+			scene.SceneDuration = 60;
+			scenes.Add(scene);
+			GameObject sceneButton = (GameObject) Instantiate(Resources.Load("SceneButton"));
+			Text text = (Text) sceneButton.GetComponentInChildren(typeof(Text));
+			text.text = scene.Name;
+			sceneButton.transform.SetParent(scenesContainer.transform, false);
+			sceneButton.GetComponent<SceneLoader>().scene = scene;
+		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}
