@@ -1,13 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public class ScenesScreen : SpeedImagerScreen {
 
 	public List<SpeedImagerScene> scenes = new List<SpeedImagerScene>();
 	public LayoutGroup scenesContainer; // Set in Unity Designer
+	public Button BackButton;
+	
+	private bool IsKeyPressed = false;
 
 	// Use this for initialization
 	void Start () {
@@ -22,8 +26,7 @@ public class ScenesScreen : SpeedImagerScreen {
 		{
 			SpeedImagerScene scene = new SpeedImagerScene(i + 1);
 			scene.Name = String.Format("Scene {00}", scene.ID);
-			scene.HP = (i+1) * 0.3 + 7;
-			scene.ImageChangeRate = (i+1) * 0.3 + 7;
+			scene.HP = (i+1) * 0.3f + 7;
 			scene.Turns = i;
 			scene.TurnDuration = 5;
 			scene.SceneDuration = 60;
@@ -32,12 +35,19 @@ public class ScenesScreen : SpeedImagerScreen {
 			Text text = (Text) sceneButton.GetComponentInChildren(typeof(Text));
 			text.text = scene.Name;
 			sceneButton.transform.SetParent(scenesContainer.transform, false);
-			sceneButton.GetComponent<SceneLoader>().scene = scene;
+			sceneButton.GetComponent<SceneButtonHandler>().scene = scene;
 		}
 	}
 
-	// Update is called once per frame
-	void Update () {
-	
+	void OnGUI () {
+		if (!this.IsCurrentScreen()) return;
+		if (Event.current.type == EventType.KeyUp)
+			this.IsKeyPressed = false;
+		if (!this.IsKeyPressed && Event.current.keyCode == KeyCode.Escape)
+		{
+			this.IsKeyPressed = true;
+			ExecuteEvents.Execute(BackButton.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+		}
 	}
+
 }

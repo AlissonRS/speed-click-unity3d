@@ -30,6 +30,7 @@ GameObject:
   - 114: {fileID: 11487600}
   - 114: {fileID: 11467928}
   - 114: {fileID: 11489202}
+  - 95: {fileID: 9570218}
   m_Layer: 5
   m_Name: SceneButton
   m_TagString: Untagged
@@ -37,6 +38,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &9570218
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172628}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 29722672249a6274cbaa2e17a3e85959, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11415044
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,7 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 349
+  m_MinWidth: 320
   m_MinHeight: 60
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -119,7 +137,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 3
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
@@ -151,7 +169,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 172628}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b763d4187bdeb4408c50173e0db8896, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ca6572da888f0b49969a06e85f248e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!222 &22243226

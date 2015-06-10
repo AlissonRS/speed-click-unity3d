@@ -3,20 +3,19 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-using UnityEditor;
 using System.Linq;
+using System.IO;
 
 public class SpeedImagerScene {
 
 	public int ID;
 	public string Name;
-	public double HP; // How fast the HP decreases...
-	public double ImageChangeRate; // How long in milisecs it takes to change the turn...
+	public float HP; // How fast the HP decreases...
 	public int Turns; // How much turns the player has to play before we change the source images...
 	public int TurnDuration; // In secs...
 	public int SceneDuration; // In secs...
 	
-	private List<Sprite> _images;
+	private List<Sprite> _images = new List<Sprite>();
 
 	public List<Sprite> Images
 	{
@@ -30,14 +29,37 @@ public class SpeedImagerScene {
 	public SpeedImagerScene(int ID)
 	{
 		this.ID = ID;
-		this.LoadImages();
+	}
+	
+	public float DecreaseHPAmount(float max)
+	{
+		return max * (this.HP / 10f * 0.3f); // The more the HP, the more it decreases...
+	}
+
+	public float IncreaseHPAmount(float max)
+	{
+		return max * (1f / Convert.ToSingle(Math.Pow(this.HP,2f))); // The more the HP, the less it increases...
 	}
 
 	private void LoadImages()
 	{
-		string place = String.Format("SceneImages/{000}", this.ID);
-		UnityEngine.Object[] sprites =(UnityEngine.Object[])AssetDatabase.LoadAllAssetsAtPath(place);
-		_images = (List<Sprite>) sprites.ToList();
+		string path = String.Format("c:/SpeedImager/Scenes/{0}/", this.ID.ToString("D3"));
+		string url = String.Format("file:///c:/SpeedImager/Scenes/{0}/", this.ID.ToString("D3"));
+		DirectoryInfo dir = new DirectoryInfo(path);
+		FileInfo[] info = dir.GetFiles("*.*");
+		foreach (FileInfo f in info) 
+		{
+			// Start a download of the given URL
+			WWW www = new WWW (url + f.Name);
+			// Wait for download to complete
+//			yield www;
+			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
+		}
+	}
+
+	public int Points()
+	{
+		return 100;
 	}
 
 }
