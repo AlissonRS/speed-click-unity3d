@@ -12,18 +12,20 @@ public class KeyboardShortcutConfig
 	public static KeyCode Image6 = KeyCode.V; 
 	public static KeyCode Image7 = KeyCode.N; 
 	public static KeyCode Image8 = KeyCode.M; 
+	public static KeyCode MouseKey = KeyCode.X;
 	
-	public static int GetImageIndex(KeyCode key)
+	public static GameJoystickButtons GetGameJoystickButton(KeyCode key)
 	{
-		if (key == Image1) return 0;
-		if (key == Image2) return 1;
-		if (key == Image3) return 2;
-		if (key == Image4) return 3;
-		if (key == Image5) return 4;
-		if (key == Image6) return 5;
-		if (key == Image7) return 6;
-		if (key == Image8) return 7;
-		return -1;
+		if (key == Image1) return GameJoystickButtons.Image1;
+		if (key == Image2) return GameJoystickButtons.Image2;
+		if (key == Image3) return GameJoystickButtons.Image3;
+		if (key == Image4) return GameJoystickButtons.Image4;
+		if (key == Image5) return GameJoystickButtons.Image5;
+		if (key == Image6) return GameJoystickButtons.Image6;
+		if (key == Image7) return GameJoystickButtons.Image7;
+		if (key == Image8) return GameJoystickButtons.Image8;
+		if (key == MouseKey) return GameJoystickButtons.MouseKey;
+		return GameJoystickButtons.Undefined;
 	}
 
 }

@@ -29,8 +29,9 @@ GameObject:
   - 114: {fileID: 11415044}
   - 114: {fileID: 11487600}
   - 114: {fileID: 11467928}
-  - 114: {fileID: 11489202}
   - 95: {fileID: 9570218}
+  - 114: {fileID: 11441952}
+  - 114: {fileID: 11451326}
   m_Layer: 5
   m_Name: SceneButton
   m_TagString: Untagged
@@ -76,6 +77,28 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11441952
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821ddd2eb1b62354ebc05e12cfa418fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11451326
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c4eb457cd5783f4c9994b581542568b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11467928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -161,17 +184,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11489202
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 172628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6572da888f0b49969a06e85f248e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &22243226
 CanvasRenderer:
   m_ObjectHideFlags: 1

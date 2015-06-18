@@ -12,7 +12,7 @@ public class SpeedImagerScene {
 	public string Name;
 	public float HP; // How fast the HP decreases...
 	public int Turns; // How much turns the player has to play before we change the source images...
-	public int TurnDuration; // In secs...
+	public float TurnDuration; // In secs...
 	public int SceneDuration; // In secs...
 	
 	private List<Sprite> _images = new List<Sprite>();
@@ -43,6 +43,24 @@ public class SpeedImagerScene {
 
 	private void LoadImages()
 	{
+//		if (Application.platform == RuntimePlatform.Android)
+			LoadImagesFromAssets();
+//		else
+//			LoadImagesFromDir();
+	}
+
+	private void LoadImagesFromAssets()
+	{
+		string place = String.Format("Scenes/{000}", this.ID.ToString("D3"));
+		Sprite[] sprites = Resources.LoadAll <Sprite> (place); 
+		foreach (Sprite sprite in sprites) {
+			_images.Add(sprite);
+		}
+//		_images = (List<Sprite>) sprites.ToList();
+	}
+
+	private void LoadImagesFromDir()
+	{
 		string path = String.Format("c:/SpeedImager/Scenes/{0}/", this.ID.ToString("D3"));
 		string url = String.Format("file:///c:/SpeedImager/Scenes/{0}/", this.ID.ToString("D3"));
 		DirectoryInfo dir = new DirectoryInfo(path);
@@ -52,7 +70,7 @@ public class SpeedImagerScene {
 			// Start a download of the given URL
 			WWW www = new WWW (url + f.Name);
 			// Wait for download to complete
-//			yield www;
+			//			yield www;
 			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
 		}
 	}

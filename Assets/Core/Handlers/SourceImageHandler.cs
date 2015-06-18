@@ -2,22 +2,24 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class SourceImageHandler : MonoBehaviour, IPointerClickHandler {
+public class SourceImageHandler : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
 	public int Index = -1;
+	public static GameObject currentObject;
 
 	public void OnPointerClick (PointerEventData eventData)
 	{
 		SpeedImagerHelpers.GetInstance<GameScreen>().Hit(this);
 	}
-
-	// Use this for initialization
-	void Start () {
 	
+	public void OnPointerEnter (PointerEventData eventData)
+	{
+		currentObject = this.gameObject;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	public void OnPointerExit (PointerEventData eventData)
+	{
+		currentObject = null;
 	}
+	
 }

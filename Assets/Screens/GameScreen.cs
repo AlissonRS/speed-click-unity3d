@@ -25,7 +25,7 @@ public class GameScreen : SpeedImagerScreen {
 	}
 	private float LeftSceneSecs = 0;
 	private int TurnsCount = 0;
-	private List<Image> images = new List<Image>();
+	private static List<Image> _images = new List<Image>();
 	private int CurrentTargetIndex = -1;
 	private bool DoCountDown = true;
 	private bool IsKeyPressed = false;
@@ -39,6 +39,12 @@ public class GameScreen : SpeedImagerScreen {
 	public Slider HealthBar;
 	public Image TargetImage;
 	public LayoutGroup SourceImages;
+	public Text DebugText;
+
+	public static List<Image> images {
+		get { return _images; }
+		private set { _images = value; }
+	}
 
 	public bool IsPaused { get; set; }
 
@@ -61,9 +67,16 @@ public class GameScreen : SpeedImagerScreen {
 	{
 		if (this.IsPaused)
 		{
+//			this.DebugText.text = "PAUSED";
 			this.IsPaused = false;
 			return;
 		}
+		this.DoCountDown = true;
+		this.Interactable = true;
+		this.Combo = 0;
+		this.Points = 0;
+		this.TurnsCount = 0;
+		this.PointsText.text = this.Points.ToString("D9");
 		this.LeftSceneSecs = this.scene.SceneDuration;
 		this.DecreaseHPAmount = this.scene.DecreaseHPAmount(this.HealthBar.maxValue);
 		this.IncreaseHPAmount = this.scene.IncreaseHPAmount(this.HealthBar.maxValue);
@@ -72,6 +85,7 @@ public class GameScreen : SpeedImagerScreen {
 			GameObject.Destroy(child.gameObject);
 
 		int i = 0;
+		images.Clear();
 		foreach(Sprite img in this.scene.Images)
 		{
 			GameObject sourceImagePrefab = (GameObject) Instantiate(Resources.Load("SourceImage"));
@@ -81,9 +95,10 @@ public class GameScreen : SpeedImagerScreen {
 			srcImage.sprite = img;
 			sourceImagePrefab.name = String.Format("sourceImage_{0}",i);
 			srcImage.transform.SetParent(SourceImages.transform, false);
-			this.images.Add(srcImage);
+			images.Add(srcImage);
 			i++;
 		}
+//		this.DebugText.text = "LOADING TARGET";
 
 		this.LoadTarget();
 		this.IsLoaded = true;
@@ -94,8 +109,23 @@ public class GameScreen : SpeedImagerScreen {
 	{
 		this.LeftTurnSecs = this.scene.TurnDuration; // Reset turn timer...
 		this.TurnsCount++;
-		this.TargetImage.sprite = SpeedImagerHelpers.GetRandom<Image>(this.images).sprite;
+		this.TargetImage.sprite = SpeedImagerHelpers.GetRandom<Image>(images).sprite;
 		this.CurrentTargetIndex = SpeedImagerHelpers.LastRandomIndex;
+	}
+
+	public void Restart()
+	{
+		this.IsPaused = false;
+		this.IsLoaded = false;
+		SpeedImagerDirector.ShowScreen(Screens.GameScreen);
+	}
+
+	public void Resume()
+	{
+		this.IsPaused = false;
+		SpeedImagerDirector.GetCurrentScreen().IsVisible = false;
+		this.Interactable = true;
+		this.Fade(1);
 	}
 
 	void Update()
@@ -130,15 +160,11 @@ public class GameScreen : SpeedImagerScreen {
 		if (!this.IsKeyPressed && Event.current.type == EventType.KeyDown)
 		{
 			this.IsKeyPressed = true;
-			// Check ShortCuts for clicking
-			int index = KeyboardShortcutConfig.GetImageIndex(Event.current.keyCode);
-			if (index > -1)
-				ExecuteEvents.Execute(this.images[index].gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-			// Pause Menu
-			else if (Event.current.keyCode == KeyCode.Escape)
+			GameJoystick.SimulateEvent(KeyboardShortcutConfig.GetGameJoystickButton(Event.current.keyCode));
+			if (Event.current.keyCode == KeyCode.Escape)
 			{
 				IsPaused = true;
-				SpeedImagerDirector.ShowScreen(Screens.PauseScreen, false);
+				SpeedImagerDirector.ShowScreen(Screens.PauseScreen, 0.1f);
 			}
 		}
 	}

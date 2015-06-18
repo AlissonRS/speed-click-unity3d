@@ -26,16 +26,16 @@ public class ScenesScreen : SpeedImagerScreen {
 		{
 			SpeedImagerScene scene = new SpeedImagerScene(i + 1);
 			scene.Name = String.Format("Scene {00}", scene.ID);
-			scene.HP = (i+1) * 0.3f + 7;
+			scene.HP = (i+1) * 0.7f + 3;
 			scene.Turns = i;
-			scene.TurnDuration = 5;
+			scene.TurnDuration = 5.2f - ((i+1f) * 0.2f);
 			scene.SceneDuration = 60;
 			scenes.Add(scene);
 			GameObject sceneButton = (GameObject) Instantiate(Resources.Load("SceneButton"));
 			Text text = (Text) sceneButton.GetComponentInChildren(typeof(Text));
 			text.text = scene.Name;
 			sceneButton.transform.SetParent(scenesContainer.transform, false);
-			sceneButton.GetComponent<SceneButtonHandler>().scene = scene;
+			sceneButton.GetComponent<LoadSceneCommand>().scene = scene;
 		}
 	}
 

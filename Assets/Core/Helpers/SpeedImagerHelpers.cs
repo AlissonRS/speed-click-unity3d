@@ -15,7 +15,16 @@ public static class SpeedImagerHelpers
 		return (T) GameObject.FindObjectOfType(typeof(T));
 	}
 
-	public static T GetRandom<T>(IList<T> list, IList<T> exclude = null)
+	public static T GetRandom<T>(IList<T> list)
+	{
+		IList<T> range = new List<T>(list);
+		if (range.Count() == 0)
+			throw new InvalidOperationException("Could not get Random Object from the passed list, because it's empty! ");
+		LastRandomIndex = randomGen.Next(0, range.Count());
+		return range[LastRandomIndex];
+	}
+	
+	public static T GetRandom<T>(IList<T> list, IList<T> exclude)
 	{
 		IList<T> range = new List<T>(list);
 		if (exclude != null)
