@@ -32,14 +32,14 @@ public class GameScreen : SpeedImagerScreen {
 	private bool IsLoaded = false;
 	private float DecreaseHPAmount = 0;
 	private float IncreaseHPAmount = 0;
-
+	
+	public Text ComboText;
 	public Text PointsText;
 	public Text SceneClock;
 	public Image TurnClock;
 	public Slider HealthBar;
 	public Image TargetImage;
-	public LayoutGroup SourceImages;
-	public Text DebugText;
+	public SourceImagesPanel SourceImages;
 
 	public static List<Image> images {
 		get { return _images; }
@@ -54,7 +54,7 @@ public class GameScreen : SpeedImagerScreen {
 		{
 			this.Combo++;
 			this.HealthBar.value += this.IncreaseHPAmount;
-			this.Points += this.scene.Points();
+			this.Points += this.scene.Points() * this.Combo;
 			this.PointsText.text = this.Points.ToString("D9");
 		} else {
 			this.Combo = 0;
@@ -81,24 +81,8 @@ public class GameScreen : SpeedImagerScreen {
 		this.DecreaseHPAmount = this.scene.DecreaseHPAmount(this.HealthBar.maxValue);
 		this.IncreaseHPAmount = this.scene.IncreaseHPAmount(this.HealthBar.maxValue);
 
-		foreach (Transform child in this.SourceImages.transform)
-			GameObject.Destroy(child.gameObject);
-
-		int i = 0;
 		images.Clear();
-		foreach(Sprite img in this.scene.Images)
-		{
-			GameObject sourceImagePrefab = (GameObject) Instantiate(Resources.Load("SourceImage"));
-			Image srcImage = (Image) sourceImagePrefab.GetComponentInChildren(typeof(Image));
-			SourceImageHandler handler = (SourceImageHandler) sourceImagePrefab.GetComponentInChildren(typeof(SourceImageHandler));
-			handler.Index = i;
-			srcImage.sprite = img;
-			sourceImagePrefab.name = String.Format("sourceImage_{0}",i);
-			srcImage.transform.SetParent(SourceImages.transform, false);
-			images.Add(srcImage);
-			i++;
-		}
-//		this.DebugText.text = "LOADING TARGET";
+		images.AddRange(this.SourceImages.LoadImages(this.scene.Images));
 
 		this.LoadTarget();
 		this.IsLoaded = true;
@@ -107,6 +91,7 @@ public class GameScreen : SpeedImagerScreen {
 
 	void LoadTarget()
 	{
+		this.ComboText.text = String.Format("x {0}",this.Combo);
 		this.LeftTurnSecs = this.scene.TurnDuration; // Reset turn timer...
 		this.TurnsCount++;
 		this.TargetImage.sprite = SpeedImagerHelpers.GetRandom<Image>(images).sprite;
@@ -161,11 +146,6 @@ public class GameScreen : SpeedImagerScreen {
 		{
 			this.IsKeyPressed = true;
 			GameJoystick.SimulateEvent(KeyboardShortcutConfig.GetGameJoystickButton(Event.current.keyCode));
-			if (Event.current.keyCode == KeyCode.Escape)
-			{
-				IsPaused = true;
-				SpeedImagerDirector.ShowScreen(Screens.PauseScreen, 0.1f);
-			}
 		}
 	}
 
