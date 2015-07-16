@@ -12,6 +12,10 @@ GameObject:
   - 114: {fileID: 11475544}
   - 114: {fileID: 11467772}
   - 114: {fileID: 11424458}
+  - 95: {fileID: 9531468}
+  - 114: {fileID: 11461086}
+  - 114: {fileID: 11417880}
+  - 114: {fileID: 11463944}
   m_Layer: 5
   m_Name: RankingItem
   m_TagString: Untagged
@@ -70,6 +74,34 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &9531468
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104102}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 29722672249a6274cbaa2e17a3e85959, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11417880
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21222a7879559524dbc2dd79c1cfc55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11422138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -161,6 +193,34 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Pts. 999.999 - (999x)
+--- !u!114 &11461086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e4ea44cc28fde4185c4e32ad29a134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnEscape: 0
+  OnClick: 0
+  TabOrder: 0
+--- !u!114 &11463944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d846264aa7616e54187c08660fe8630c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Avatar: {fileID: 11422138}
+  Nick: {fileID: 11432970}
+  Score: {fileID: 11458076}
 --- !u!114 &11467772
 MonoBehaviour:
   m_ObjectHideFlags: 1

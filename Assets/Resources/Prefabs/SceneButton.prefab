@@ -32,7 +32,6 @@ GameObject:
   - 95: {fileID: 9570218}
   - 114: {fileID: 11409338}
   - 114: {fileID: 11451326}
-  - 114: {fileID: 11465408}
   - 114: {fileID: 11431322}
   m_Layer: 5
   m_Name: SceneButton
@@ -70,8 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnEscape: 0
-  OnClick: 7
-  OnDoubleClick: 1
+  OnClick: 1
   TabOrder: 0
 --- !u!114 &11415044
 MonoBehaviour:
@@ -114,17 +112,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c4eb457cd5783f4c9994b581542568b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11465408
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 172628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f0bf57a1290f7348a1a5707eb392abd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11467928

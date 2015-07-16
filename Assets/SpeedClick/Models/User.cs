@@ -1,19 +1,29 @@
 using UnityEngine;
 using System.Collections;
+using Alisson.Core;
+using Alisson.Core.Repository;
+using System.Linq;
+using System.Collections.Generic;
 
-public class User : MonoBehaviour
+public class User : BaseObject
 {
 
-	// Use this for initialization
-	void Start ()
+	public string Login;
+
+	public User(int id, string login)
 	{
-	
+		this.ID = id;
+		this.Login = login;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+	public Sprite GetAvatar()
 	{
-	
+		IEnumerable<UserAvatar> list = BaseRepository<UserAvatar>.getAll().Where(a => a.UserID == this.ID);
+		if (list.Count() == 0)
+			return BaseRepository<UserAvatar>.add(new UserAvatar(this, null)).Avatar;
+		else
+			return list.First().Avatar;
 	}
+
 }
 

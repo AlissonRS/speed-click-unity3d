@@ -11,7 +11,6 @@ public class SIComponent : MonoBehaviour, IPointerClickHandler {
 
 	public Commands OnEscape;
 	public Commands OnClick;
-	public Commands OnDoubleClick;
 	public int TabOrder;
 	public SIComponent Parent {
 		get
@@ -28,7 +27,7 @@ public class SIComponent : MonoBehaviour, IPointerClickHandler {
 
 	private List<SIComponent> children;
 
-	void Start()
+	public void Start()
 	{
 		this.Parent = this.GetComponentInParent<SIComponent>();
 		children = this.GetComponentsInChildren<SIComponent>().ToList();
@@ -69,7 +68,7 @@ public class SIComponent : MonoBehaviour, IPointerClickHandler {
 		return this.gameObject.activeInHierarchy && cv != null && cv.alpha > 0;
 	}
 
-	public Command GetCommand(Commands c)
+	private Command GetCommand(Commands c)
 	{
 		Type type;
 		switch (c)
@@ -100,13 +99,14 @@ public class SIComponent : MonoBehaviour, IPointerClickHandler {
 		EventSystem.current.SetSelectedGameObject(this.gameObject);
 	}
 
-	void onGUI()
+	public void OnGUI()
 	{
 		if (Event.current.type == EventType.KeyUp)
 		{
+			if (OnEscape == Commands.Undefined) return;
 			switch (Event.current.keyCode)
 			{
-			case KeyCode.Escape: this.GetCommand(OnEscape).Execute(this); break;
+			case KeyCode.Escape: StartCoroutine(this.GetCommand(OnEscape).Execute(this)); break;
 			default: break;
 			}
 		}
@@ -114,7 +114,7 @@ public class SIComponent : MonoBehaviour, IPointerClickHandler {
 
 	public void OnPointerClick (PointerEventData eventData)
 	{
-		if (OnClick == Commands.Undefined) return;
-		this.GetCommand(OnClick).Execute(this);
+		if (OnClick == Commands.Undefined || !this.gameObject.activeInHierarchy) return;
+		StartCoroutine(this.GetCommand(OnClick).Execute(this));
 	}
 }

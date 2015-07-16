@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class ShowScreenCommand : Command
 {
 	
-	public Screens TargetScreen;
+	public SpeedImagerScreen TargetScreen;
 	
-	public override void Execute(SIComponent c)
+	public override IEnumerator Execute(SIComponent c)
 	{
-		SpeedImagerDirector.ShowScreen(TargetScreen);
+		SpeedImagerDirector.ShowScreen(TargetScreen, true);
+		yield return null;
 	}
 	
 }

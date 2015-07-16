@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -16,20 +16,18 @@ public class GameScreen : SpeedImagerScreen {
 	{
 		get
 		{
-			return this.TurnClock.fillAmount * this.scene.TurnDuration;
+			return this.TurnClock.fillAmount * this.scene.TurnLength;
 		}
 		set
 		{
-			this.TurnClock.fillAmount = (1 * (value / this.scene.TurnDuration));
+			this.TurnClock.fillAmount = (1 * (value / this.scene.TurnLength));
 		}
 	}
 	private float LeftSceneSecs = 0;
 	private int TurnsCount = 0;
 	private static List<Image> _images = new List<Image>();
 	private int CurrentTargetIndex = -1;
-	private bool DoCountDown = true;
 	private bool IsKeyPressed = false;
-	private bool IsLoaded = false;
 	private float DecreaseHPAmount = 0;
 	private float IncreaseHPAmount = 0;
 	
@@ -45,7 +43,9 @@ public class GameScreen : SpeedImagerScreen {
 		get { return _images; }
 		private set { _images = value; }
 	}
-
+	
+	public bool DoCountDown = true;
+	public bool IsLoaded = false;
 	public bool IsPaused { get; set; }
 
 	public void Hit(SourceImageHandler src)
@@ -65,25 +65,23 @@ public class GameScreen : SpeedImagerScreen {
 
 	public override void LoadScreen()
 	{
-		if (this.IsPaused)
-		{
-//			this.DebugText.text = "PAUSED";
-			this.IsPaused = false;
-			return;
-		}
+		if(this.IsPaused) return;
+		this.Interactable = false;
 		this.DoCountDown = true;
 		this.Interactable = true;
 		this.Combo = 0;
 		this.Points = 0;
 		this.TurnsCount = 0;
+		this.HealthBar.value = 0;
 		this.PointsText.text = this.Points.ToString("D9");
-		this.LeftSceneSecs = this.scene.SceneDuration;
+		this.LeftSceneSecs = this.scene.SceneLength;
 		this.DecreaseHPAmount = this.scene.DecreaseHPAmount(this.HealthBar.maxValue);
 		this.IncreaseHPAmount = this.scene.IncreaseHPAmount(this.HealthBar.maxValue);
 
 		images.Clear();
 		images.AddRange(this.SourceImages.LoadImages(this.scene.Images));
 
+		this.Interactable = true;
 		this.LoadTarget();
 		this.IsLoaded = true;
 
@@ -92,25 +90,10 @@ public class GameScreen : SpeedImagerScreen {
 	void LoadTarget()
 	{
 		this.ComboText.text = String.Format("x {0}",this.Combo);
-		this.LeftTurnSecs = this.scene.TurnDuration; // Reset turn timer...
+		this.LeftTurnSecs = this.scene.TurnLength; // Reset turn timer...
 		this.TurnsCount++;
 		this.TargetImage.sprite = SpeedImagerHelpers.GetRandom<Image>(images).sprite;
 		this.CurrentTargetIndex = SpeedImagerHelpers.LastRandomIndex;
-	}
-
-	public void Restart()
-	{
-		this.IsPaused = false;
-		this.IsLoaded = false;
-		SpeedImagerDirector.ShowScreen(Screens.GameScreen);
-	}
-
-	public void Resume()
-	{
-		this.IsPaused = false;
-		SpeedImagerDirector.GetCurrentScreen().IsVisible = false;
-		this.Interactable = true;
-		this.Fade(1);
 	}
 
 	void Update()
@@ -118,14 +101,14 @@ public class GameScreen : SpeedImagerScreen {
 		if (!this.IsLoaded || IsPaused) return;
 		if (this.DoCountDown)
 		{
-			this.HealthBar.value += (this.HealthBar.maxValue / 2 * Time.deltaTime); // 2 secs to fill progress bar
+			this.HealthBar.value += (this.HealthBar.maxValue / 1.5f * Time.deltaTime); // 1.5 secs to fill progress bar
 			this.DoCountDown = this.HealthBar.value < this.HealthBar.maxValue;
 			return;
 		}
 
 		this.LeftTurnSecs -= Time.deltaTime;
 		this.LeftSceneSecs -= Time.deltaTime;
-		this.HealthBar.value -= (this.HealthBar.maxValue / 30 * Time.deltaTime);
+		this.HealthBar.value -= (this.DecreaseHPAmount / 3 * Time.deltaTime);
 		int leftSceneSecs = Convert.ToInt32(Math.Ceiling(this.LeftSceneSecs));
 		int leftTurnSecs = Convert.ToInt32(Math.Ceiling(this.LeftTurnSecs));
 		this.SceneClock.text = String.Format("{0:0}:{1:00}", Mathf.Floor(leftSceneSecs/60), leftSceneSecs % 60);

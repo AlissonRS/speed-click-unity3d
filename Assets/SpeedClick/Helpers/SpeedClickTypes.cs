@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+public enum Connections {
+	ServerConn,
+	LocalConn
+}
 
 public enum Screens {
 	MainScreen,
@@ -32,7 +36,6 @@ public enum Commands
 	ShowScreen,
 	ExitGame,
 	PauseGame,
-	RegisterUser,
-	SelectScene
+	RegisterUser
 }
 

@@ -5,15 +5,17 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.IO;
+using Alisson.Core;
 
-public class SpeedImagerScene {
+public class SpeedImagerScene: BaseObject {
 
-	public int ID;
-	public string Name;
 	public float HP; // How fast the HP decreases...
+	public string Instructions;
+	public int SceneLength; // In secs...
+	public string Title;
+	public float TurnLength; // In secs...
 	public int Turns; // How much turns the player has to play before we change the source images...
-	public float TurnDuration; // In secs...
-	public int SceneDuration; // In secs...
+	public int UserID;
 	
 	private List<Sprite> _images = new List<Sprite>();
 
@@ -34,6 +36,11 @@ public class SpeedImagerScene {
 	public float DecreaseHPAmount(float max)
 	{
 		return max * (this.HP / 10f * 0.3f); // The more the HP, the more it decreases...
+	}
+
+	public string GetProperties()
+	{
+		return String.Format("Itens: {0} - HP: {0} - TL: {0} - SL: {0} - TC: {0}", this.Images.Count, this.HP, this.TurnLength, this.SceneLength, this.Turns);
 	}
 
 	public float IncreaseHPAmount(float max)

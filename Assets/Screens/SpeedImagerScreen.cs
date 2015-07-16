@@ -14,7 +14,7 @@ public class SpeedImagerScreen : MonoBehaviour {
 	public bool IsVisible
 	{
 		get { return gameObject.activeInHierarchy; }
-		set { gameObject.SetActive(value);  if (value) { this.Fade(1); this.Interactable = value;} }
+		set { gameObject.SetActive(value);  if (value) { this.Fade(1); this.SetInteractable(value);} }
 	}
 
 	public void Fade(float value)

@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Alisson.Core.Database;
+using UnityEngine;
+using Alisson.Core.Database.Connections;
 
 namespace Alisson.Core.Repository
 {
@@ -20,7 +23,6 @@ namespace Alisson.Core.Repository
     {
 
 		protected static List<T> list = new List<T>();
-		protected static ServerManager server = new ServerManager();
 
         static BaseRepository()
         {
@@ -29,7 +31,6 @@ namespace Alisson.Core.Repository
 
         public static T add(T obj)
         {
-			server.Save(obj);
             if (list.FindIndex(o => o.ID == obj.ID) == -1)
                 list.Add(obj);
             return obj;
@@ -63,17 +64,12 @@ namespace Alisson.Core.Repository
 
         protected static List<T> getAllFresh()
         {
-            return server.GetAll<T>();
+			return ServerManager.getConn().GetAll<T>();
         }
 
         public static T getByID(int ID)
         {
             return getAll(o => o.ID == ID).First();
-        }
-
-        public static List<T> getWhere(Dictionary<string ,object> where)
-        {
-			return server.GetAll<T>(where);
         }
 
         public static T First(Func<T, bool> predicate)

@@ -9,7 +9,6 @@ public class SpeedImagerDirector : MonoBehaviour {
 
 
 	public static int currentScreenIndex;
-	public SessionManager session; // teste
 
 	private static List<SpeedImagerScreen> screens = new List<SpeedImagerScreen>();
 
@@ -56,10 +55,21 @@ public class SpeedImagerDirector : MonoBehaviour {
 		SpeedImagerScreen screen = screens[(int)type];
 		screens[currentScreenIndex].IsVisible = !hideCurrent;
 		if (!hideCurrent)
-			screens[currentScreenIndex].Interactable = false;
+			screens[currentScreenIndex].SetInteractable(false);
 		currentScreenIndex = (int)type;
 		screen.LoadScreen();
 		screen.IsVisible = true;
+	}
+	
+	public static void ShowScreen(SpeedImagerScreen activeScreen, bool hideCurrent)
+	{
+		if (hideCurrent)
+			screens[currentScreenIndex].IsVisible = false;
+		else
+			screens[currentScreenIndex].SetInteractable(false);
+		currentScreenIndex = (int)activeScreen.ScreenIndex;
+		activeScreen.LoadScreen();
+		activeScreen.IsVisible = true;
 	}
 
 }

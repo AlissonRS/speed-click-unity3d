@@ -33,7 +33,7 @@ public class SourceImagesPanel : MonoBehaviour
 		int i = 0;
 		foreach(Sprite img in imgs)
 		{
-			GameObject sourceImagePrefab = (GameObject) Instantiate(Resources.Load("SourceImage"));
+			GameObject sourceImagePrefab = (GameObject) Instantiate(Resources.Load("Prefabs/SourceImage"));
 			Image srcImage = (Image) sourceImagePrefab.GetComponentInChildren(typeof(Image));
 			SourceImageHandler handler = (SourceImageHandler) sourceImagePrefab.GetComponentInChildren(typeof(SourceImageHandler));
 			handler.Index = i;

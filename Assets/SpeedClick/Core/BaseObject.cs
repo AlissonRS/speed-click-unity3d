@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 using System.Linq;
+using Boomlagoon.JSON;
 
 namespace Alisson.Core
 {
 	abstract public class BaseObject
 	{
 
-		public int ID {	get; set; }
+		public int ID;
 
 		public BaseObject() {}
 
@@ -19,15 +20,17 @@ namespace Alisson.Core
 			return this.GetType().Name;
 		}
 
-		protected void populateProperties(Dictionary<string, object> attr)
+		public JSONObject ToJson()
 		{
-//			IEnumerable<PropertyInfo> info = this.GetType().GetProperties();
-//			foreach (PropertyInfo prop in info)
-//			{
-//				string key = prop.Name;
-//				if (attr.ContainsKey(key))
-//				    prop.SetValue(this, Convert.ChangeType(attr[key], prop.PropertyType));
-//			}
+			JSONObject obj = new JSONObject();
+			Type t = this.GetType();
+			FieldInfo[] fields = t.GetFields(BindingFlags.Public|BindingFlags.Instance);
+			foreach(FieldInfo field in fields)
+			{
+				if (field.GetValue(this) != null)
+					obj.Add(field.Name, SpeedImagerHelpers.BuildJSONValue(field.GetValue(this)));
+			}
+			return obj;
 		}
 
 		public T UnderlyingObject<T>() where T : BaseObject
