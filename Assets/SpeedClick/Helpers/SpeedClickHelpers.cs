@@ -12,12 +12,7 @@ public static class SpeedImagerHelpers
 	private static int ModalID;
 	
 	private static System.Random randomGen = new System.Random();
-
-	public static void DisplayModal(string text)
-	{
-		//
-	}
-
+	
 	public static JSONValue BuildJSONValue(object value)
 	{
 		switch (Type.GetTypeCode(value.GetType()))
@@ -35,16 +30,11 @@ public static class SpeedImagerHelpers
 		}
 	}
 
-	public static string BuildURLParam(Dictionary<string, string> p)
+	public static string BuildURLParam(Dictionary<string, object> p)
 	{
 		List<string> list = new List<string>();
-		foreach (KeyValuePair<string,string> pair in p)
-		{
-			if (pair.Key != "secretMessage")
-				list.Add(pair.Key + "=" + WWW.EscapeURL(pair.Value));
-			else
-				list.Add(pair.Key + "=" + pair.Value);
-		}
+		foreach (KeyValuePair<string,object> pair in p)
+			list.Add(pair.Key + "=" + WWW.EscapeURL(pair.Value.ToString()));
 		return String.Join("&", list.ToArray());
 	}
 

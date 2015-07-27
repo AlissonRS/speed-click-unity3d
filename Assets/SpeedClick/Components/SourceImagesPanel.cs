@@ -26,28 +26,32 @@ public class SourceImagesPanel : MonoBehaviour
 	public List<Image> LoadImages(List<Sprite> imgs)
 	{
 		this.ClearImages();
-		this.lowerContainer.gameObject.SetActive(false);
 
 		List<Image> result = new List<Image>();
+
+		bool useUpperPanel = imgs.Count > maxImages / 2;
+		this.upperImages.gameObject.SetActive(useUpperPanel);
 
 		int i = 0;
 		foreach(Sprite img in imgs)
 		{
 			GameObject sourceImagePrefab = (GameObject) Instantiate(Resources.Load("Prefabs/SourceImage"));
-			Image srcImage = (Image) sourceImagePrefab.GetComponentInChildren(typeof(Image));
 			SourceImageHandler handler = (SourceImageHandler) sourceImagePrefab.GetComponentInChildren(typeof(SourceImageHandler));
 			handler.Index = i;
-			srcImage.sprite = img;
+			handler.childImage.sprite = img;
 			sourceImagePrefab.name = String.Format("sourceImage_{0}",i);
-			if (i < maxImages / 2)
-				sourceImagePrefab.transform.SetParent(upperImages.transform, false);
-			else
+			if (useUpperPanel)
 			{
-				lowerContainer.gameObject.SetActive(true);
-				sourceImagePrefab.transform.SetParent(lowerImages.transform, false);
+				if (i < maxImages / 2)
+					sourceImagePrefab.transform.SetParent(upperImages.transform, false);
+				else
+					sourceImagePrefab.transform.SetParent(lowerImages.transform, false);
 			}
+			else
+				sourceImagePrefab.transform.SetParent(lowerImages.transform, false);
 
-			result.Add(srcImage);
+
+			result.Add(handler.childImage);
 			i++;
 		}
 		return result;

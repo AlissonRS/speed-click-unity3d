@@ -5,8 +5,8 @@ using Alisson.Core;
 using Alisson.Core.Repository;
 using System.Linq;
 using System.Collections.Generic;
-using Alisson.Core.Encryption;
 using System.Text;
+using Alisson.Core.Encryption;
 
 public class LoginCommand : Command
 {
@@ -21,13 +21,10 @@ public class LoginCommand : Command
 	{
 		Button btn = (Button) component.gameObject.GetComponent(typeof(Button));
 		btn.interactable = false;
-		string login = Login.text;
-		string password = StringCipher.Encrypt(Password.text, StringCipher.SecretMessage) ;
-		yield return StartCoroutine(server.Login(login, password, StringCipher.SecretMessage));
-		IEnumerable<User> users = BaseRepository<User>.getAll().Where(u => u.Login == login);
+		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Get));
 		if (ServerManager.LoggedUserID > 0)
 		{
-			MessageDialogManager.ShowDialog("Login efetuado com sucesso! Parabens!");
+			MessageDialogManager.ShowDialog("Login efetuado com sucesso! Parabéns!");
 			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
 		}
 		else

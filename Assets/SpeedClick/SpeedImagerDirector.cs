@@ -52,13 +52,7 @@ public class SpeedImagerDirector : MonoBehaviour {
 
 	public static void ShowScreen(Screens type, bool hideCurrent)
 	{
-		SpeedImagerScreen screen = screens[(int)type];
-		screens[currentScreenIndex].IsVisible = !hideCurrent;
-		if (!hideCurrent)
-			screens[currentScreenIndex].SetInteractable(false);
-		currentScreenIndex = (int)type;
-		screen.LoadScreen();
-		screen.IsVisible = true;
+		ShowScreen(screens[(int)type], hideCurrent);
 	}
 	
 	public static void ShowScreen(SpeedImagerScreen activeScreen, bool hideCurrent)

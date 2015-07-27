@@ -10,6 +10,8 @@ public class SceneRankingItem: BaseObject
 	public int SceneID;
 	public int Score;
 	public int UserID;
+	
+	public SceneRankingItem() : base() { }
 
 	public SceneRankingItem (int id, User user, SpeedImagerScene scene, int score, int maxCombo)
 	{

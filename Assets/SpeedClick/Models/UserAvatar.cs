@@ -10,6 +10,8 @@ public class UserAvatar: BaseObject
 	public int UserID;
 	public Sprite Avatar;
 
+	public UserAvatar() : base() { }
+
 	public UserAvatar(User user, Sprite Avatar)
 	{
 		this.UserID = user.ID;

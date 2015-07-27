@@ -12,7 +12,7 @@ GameObject:
   - 114: {fileID: 11455010}
   - 114: {fileID: 11472482}
   - 114: {fileID: 11421088}
-  - 114: {fileID: 11408488}
+  - 114: {fileID: 11411788}
   m_Layer: 5
   m_Name: SourceImage
   m_TagString: Untagged
@@ -37,7 +37,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &11408488
+--- !u!114 &11411788
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -45,11 +45,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 108636}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1254083943, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 2
-  m_AspectRatio: 1
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!114 &11421088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -66,7 +74,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
-  m_FlexibleWidth: 1
+  m_FlexibleWidth: .200000003
   m_FlexibleHeight: 1
 --- !u!114 &11455010
 MonoBehaviour:
@@ -142,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Index: -1
+  childImage: {fileID: 11456020}
 --- !u!222 &22238168
 CanvasRenderer:
   m_ObjectHideFlags: 1

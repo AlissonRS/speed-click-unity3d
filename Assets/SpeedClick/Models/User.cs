@@ -4,11 +4,14 @@ using Alisson.Core;
 using Alisson.Core.Repository;
 using System.Linq;
 using System.Collections.Generic;
+using Boomlagoon.JSON;
 
 public class User : BaseObject
 {
 
 	public string Login;
+	
+	public User(JSONValue value) : base(value) { }
 
 	public User(int id, string login)
 	{

@@ -114,7 +114,8 @@ public class SIComponent : MonoBehaviour, IPointerClickHandler {
 
 	public void OnPointerClick (PointerEventData eventData)
 	{
-		if (OnClick == Commands.Undefined || !this.gameObject.activeInHierarchy) return;
+		if (OnClick == Commands.Undefined || !this.gameObject.activeInHierarchy)
+			return;
 		StartCoroutine(this.GetCommand(OnClick).Execute(this));
 	}
 }

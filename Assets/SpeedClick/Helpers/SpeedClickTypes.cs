@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public enum Connections {
+public enum ConnectionType {
 	ServerConn,
 	LocalConn
 }
@@ -37,5 +37,13 @@ public enum Commands
 	ExitGame,
 	PauseGame,
 	RegisterUser
+}
+
+public enum HttpMethodType
+{
+	Get,
+	Post,
+	Put,
+	Delete
 }
 

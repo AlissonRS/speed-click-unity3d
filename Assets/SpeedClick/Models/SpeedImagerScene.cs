@@ -28,6 +28,8 @@ public class SpeedImagerScene: BaseObject {
 		}
 	}
 
+	public SpeedImagerScene() : base() { }
+
 	public SpeedImagerScene(int ID)
 	{
 		this.ID = ID;

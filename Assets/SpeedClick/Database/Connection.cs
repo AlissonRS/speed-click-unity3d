@@ -3,29 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using Boomlagoon.JSON;
+using Alisson.Core;
 
 namespace Alisson.Core.Database
 {
-	public class Connection
+	public abstract class Connection: MonoBehaviour
 	{
 		
-		public JSONObject data = new JSONObject();
+		public ResponseData response = new ResponseData();
 
-		public virtual List<T> GetAll<T>() where T: BaseObject
+		public virtual IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
-			throw new NotImplementedException("");
+			yield break;
 		}
-
-		public virtual IEnumerator GetData(string controller, Dictionary<string, string> p)
-		{
-			throw new NotImplementedException("");
-		}
-
-		public virtual IEnumerator PostData(string controller, Dictionary<string, object> p)
-		{
-			throw new NotImplementedException("");
-		}
-
+		
+		public abstract IEnumerator GetAll(string model);
 
 	}
 }

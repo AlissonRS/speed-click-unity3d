@@ -23,7 +23,7 @@ namespace Alisson.Core.Extensions
 				obj.Add(pair.Key, SpeedImagerHelpers.BuildJSONValue(pair.Value));
 			return obj;
 		}
-
+	
 	}
 
 }

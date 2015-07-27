@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using Boomlagoon.JSON;
 using Alisson.Core.Extensions;
+using Alisson.Core.Repository;
 
 namespace Alisson.Core.Database.Connections
 {
@@ -16,54 +17,49 @@ namespace Alisson.Core.Database.Connections
 		protected string controller = "";
 		protected string method = "";
 
-		public override IEnumerator GetData(string controller, Dictionary<string, string> p)
+		public override IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
 			string url = host + controller;
+			WWWForm form = new WWWForm();
 			if (p != null)
 			{
-				url += "?";
-				url +=  SpeedImagerHelpers.BuildURLParam(p);
+				if (t == HttpMethodType.Post)
+				{
+					foreach(KeyValuePair<string, object> pair in p)
+						form.AddField(pair.Key, pair.Value.ToString());
+				}
+				else if (t == HttpMethodType.Get)
+				{
+					url += "?";
+					url +=  SpeedImagerHelpers.BuildURLParam(p);
+				}
 			}
-			WWW www = new WWW(url);
-			yield return www;
-
-			if (www.size <= 2)
-				yield return null;
-			else
-			{
-				data = JSONObject.Parse(www.text);
-			}
-		}
-
-		public override IEnumerator PostData(string controller, Dictionary<string, object> p)
-		{
-			string url = host + controller;
-			JSONObject dat = p.ToJson();
-
-			WWWForm form = new WWWForm();
-			form.AddField("data", dat.ToString());
 
 			WWW www = new WWW(url, form);
 			yield return www;
+
+			this.response = new ResponseData();
+			if (!String.IsNullOrEmpty(www.error))
+			{
+				this.response.Message = www.text;
+				yield break;
+			}
+			if (www.size <= 2)
+				yield break;
+			else
+			{
+				JSONObject json = JSONObject.Parse(www.text);
+				this.response.DataType = json.GetValue("Data").Type;
+				this.response.Data = json.GetObject("Data");
+				this.response.DataArray = json.GetArray("Data");
+				this.response.Message = json.GetString("Message");
+				this.response.Success = json.GetBoolean("Success");
+			}
 		}
 
-		
-		public override List<T> GetAll<T>()
+		public override IEnumerator GetAll(string model)
 		{
-			Type t = typeof(T);
-			this.GetData(t.Name, null);
-			List<T> list = new List<T>();
-			return list;
-		}
-
-		public Color GetColor(string obj, string key)
-		{
-			JSONObject jsonObj = data.GetObject(obj);
-			JSONObject jsonColor = jsonObj.GetObject(key);
-
-			float r = (float)(Convert.ToDecimal(jsonColor.GetNumber("a")));
-			return new Color();
-
+			yield return StartCoroutine(this.SendRequest(model, HttpMethodType.Get, null));
 		}
 
 	}

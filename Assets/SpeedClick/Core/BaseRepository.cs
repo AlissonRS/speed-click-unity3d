@@ -64,7 +64,7 @@ namespace Alisson.Core.Repository
 
         protected static List<T> getAllFresh()
         {
-			return ServerManager.getConn().GetAll<T>();
+			return list;
         }
 
         public static T getByID(int ID)
