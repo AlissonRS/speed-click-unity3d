@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Alisson.Core;
 using Alisson.Core.Repository;
+using Assets.SpeedClick.Core;
 
 public class SceneRankingItem: BaseObject
 {
@@ -10,26 +12,15 @@ public class SceneRankingItem: BaseObject
 	public int SceneID;
 	public int Score;
 	public int UserID;
-	
-	public SceneRankingItem() : base() { }
-
-	public SceneRankingItem (int id, User user, SpeedImagerScene scene, int score, int maxCombo)
-	{
-		this.ID = id;
-		this.UserID = user.ID;
-		this.SceneID = scene.ID;
-		this.Score = score;
-		this.MaxCombo = maxCombo;
-	}
 
 	public User GetUser()
 	{
-		return BaseRepository<User>.getByID(this.UserID);
+        return BaseRepository.getById<User>(this.UserID);
 	}
 
 	public SpeedImagerScene GetScene()
 	{
-		return BaseRepository<SpeedImagerScene>.getByID(this.SceneID);
+        return BaseRepository.getById<SpeedImagerScene>(this.SceneID);
 	}
 
 }

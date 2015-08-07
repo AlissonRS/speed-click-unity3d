@@ -8,37 +8,43 @@ using Boomlagoon.JSON;
 
 namespace Alisson.Core
 {
-	abstract public class BaseObject
+	public class BaseObject: MonoBehaviour
 	{
 
 		public int ID;
 
 		public BaseObject() {}
 
-		public BaseObject(JSONValue value)
+        public virtual void DefineGameObjectName()
+        {
+            this.gameObject.name = String.Format("{0}_{1}", this.getTableName(), this.ID);
+        }
+
+		public void ParseObject(JSONValue json)
 		{
-			JSONObject json = value.Obj;
+			JSONObject jsonObj = json.Obj;
 			IEnumerable<FieldInfo> info = this.GetType().GetFields();
 			foreach (FieldInfo field in info)
 			{
-				if (json.ContainsKey(field.Name))
+				if (jsonObj.ContainsKey(field.Name))
 				{
 					TypeCode code = Type.GetTypeCode(field.FieldType);
 					switch(code)
 					{
-					case TypeCode.Int16: field.SetValue(this, Convert.ToInt16(json.GetNumber(field.Name))); break;
-					case TypeCode.Int32: field.SetValue(this, Convert.ToInt32(json.GetNumber(field.Name))); break;
-					case TypeCode.Int64: field.SetValue(this, Convert.ToInt64(json.GetNumber(field.Name))); break;
-					case TypeCode.Single: field.SetValue(this, Convert.ToSingle(json.GetNumber(field.Name))); break;
-					case TypeCode.Double: field.SetValue(this, json.GetNumber(field.Name)); break;
-					case TypeCode.Decimal: field.SetValue(this, Convert.ToDecimal(json.GetNumber(field.Name))); break;
-					case TypeCode.Boolean: field.SetValue(this, json.GetBoolean(field.Name)); break;
-					case TypeCode.DateTime: field.SetValue(this, Convert.ToDateTime(json.GetNumber(field.Name))); break;
-					case TypeCode.String: field.SetValue(this, json.GetString(field.Name)); break;
-					default: field.SetValue(this, Convert.ChangeType(json.GetString(field.Name), field.FieldType)); break;
+					case TypeCode.Int16: field.SetValue(this, Convert.ToInt16(jsonObj.GetNumber(field.Name))); break;
+					case TypeCode.Int32: field.SetValue(this, Convert.ToInt32(jsonObj.GetNumber(field.Name))); break;
+					case TypeCode.Int64: field.SetValue(this, Convert.ToInt64(jsonObj.GetNumber(field.Name))); break;
+					case TypeCode.Single: field.SetValue(this, Convert.ToSingle(jsonObj.GetNumber(field.Name))); break;
+					case TypeCode.Double: field.SetValue(this, jsonObj.GetNumber(field.Name)); break;
+					case TypeCode.Decimal: field.SetValue(this, Convert.ToDecimal(jsonObj.GetNumber(field.Name))); break;
+					case TypeCode.Boolean: field.SetValue(this, jsonObj.GetBoolean(field.Name)); break;
+					case TypeCode.DateTime: field.SetValue(this, Convert.ToDateTime(jsonObj.GetNumber(field.Name))); break;
+					case TypeCode.String: field.SetValue(this, jsonObj.GetString(field.Name)); break;
+					default: field.SetValue(this, Convert.ChangeType(jsonObj.GetString(field.Name), field.FieldType)); break;
 					}
 				}
 			}
+            this.DefineGameObjectName();
 		}
 
 		public virtual string getTableName()
@@ -59,10 +65,6 @@ namespace Alisson.Core
 			return obj;
 		}
 
-		public T UnderlyingObject<T>() where T : BaseObject
-		{
-			return (T) this;
-		}
-	}
+    }
 }
 

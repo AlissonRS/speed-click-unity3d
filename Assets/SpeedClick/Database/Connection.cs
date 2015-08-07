@@ -12,12 +12,12 @@ namespace Alisson.Core.Database
 		
 		public ResponseData response = new ResponseData();
 
-		public virtual IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
+        public virtual IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
 			yield break;
 		}
-		
-		public abstract IEnumerator GetAll(string model);
+
+        public abstract IEnumerator GetAll(string model);
 
 	}
 }

@@ -7,9 +7,8 @@ namespace Alisson.Core
 {
 
 	public class ResponseData
-	{
-		
-		public JSONObject Data;
+    {
+        public JSONValue Data;
 		public JSONArray DataArray;
 		public JSONValueType DataType;
 		public string Message = "";

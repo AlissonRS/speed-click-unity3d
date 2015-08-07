@@ -23,12 +23,7 @@ public class LoginCommand : Command
 		btn.interactable = false;
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Get));
 		if (ServerManager.LoggedUserID > 0)
-		{
-			MessageDialogManager.ShowDialog("Login efetuado com sucesso! Parabéns!");
 			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
-		}
-		else
-			MessageDialogManager.ShowDialog("Login e/ou senha incorreto(s)!");
 		btn.interactable = true;
 	}
 

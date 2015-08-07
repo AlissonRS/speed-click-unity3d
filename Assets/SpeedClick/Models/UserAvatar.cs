@@ -3,16 +3,15 @@ using System.Collections;
 using Alisson.Core;
 using System;
 using Alisson.Core.Repository;
+using Assets.SpeedClick.Core;
 
 public class UserAvatar: BaseObject
 {
 
 	public int UserID;
 	public Sprite Avatar;
-
-	public UserAvatar() : base() { }
-
-	public UserAvatar(User user, Sprite Avatar)
+    
+	public void Load(User user, Sprite Avatar)
 	{
 		this.UserID = user.ID;
 		if (Avatar == null)
@@ -30,8 +29,9 @@ public class UserAvatar: BaseObject
 		Sprite[] sprites = Resources.LoadAll <Sprite> ("Avatar"); 
 		foreach (Sprite sprite in sprites)
 		{
-			User user = BaseRepository<User>.getByID(Convert.ToInt32(sprite.name));
-			BaseRepository<UserAvatar>.add(new UserAvatar(user, sprite));
+            User user = BaseRepository.getById<User>(Convert.ToInt32(sprite.name));
+            UserAvatar userAvatar = BaseRepository.add<UserAvatar>();
+            userAvatar.Load(user, sprite);
 		}
 	}
 

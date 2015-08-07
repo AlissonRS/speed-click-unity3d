@@ -28,13 +28,6 @@ public class SpeedImagerScene: BaseObject {
 		}
 	}
 
-	public SpeedImagerScene() : base() { }
-
-	public SpeedImagerScene(int ID)
-	{
-		this.ID = ID;
-	}
-	
 	public float DecreaseHPAmount(float max)
 	{
 		return max * (this.HP / 10f * 0.3f); // The more the HP, the more it decreases...

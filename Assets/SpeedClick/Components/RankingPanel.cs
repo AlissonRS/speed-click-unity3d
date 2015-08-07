@@ -3,18 +3,26 @@ using System.Collections;
 using UnityEngine.UI;
 using Alisson.Core.Repository;
 using System.Linq;
+using Assets.SpeedClick.Core;
+using System.Collections.Generic;
 
 public class RankingPanel : MonoBehaviour
 {
 	
 	public VerticalLayoutGroup RankingList;
 
-	public void SetScene(SpeedImagerScene scene)
+	public IEnumerator SetScene(SpeedImagerScene scene)
 	{
 		foreach (Transform child in RankingList.transform)
 			GameObject.Destroy(child.gameObject);
 
-		foreach(SceneRankingItem ranking in BaseRepository<SceneRankingItem>.getAll().OrderByDescending(r => r.Score))
+        IEnumerable<SceneRankingItem> items = BaseRepository.getAll<SceneRankingItem>();
+        if (items.Count() == 0)
+        {
+            yield return StartCoroutine(BaseRepository.getAllFresh<SceneRankingItem>());
+            items = BaseRepository.getAll<SceneRankingItem>();
+        }
+        foreach (SceneRankingItem ranking in items.OrderByDescending(r => r.Score))
 		{
 			GameObject obj = (GameObject) Instantiate(Resources.Load("Prefabs/RankingItem"));
 			RankingItem item = obj.GetComponent<RankingItem>();

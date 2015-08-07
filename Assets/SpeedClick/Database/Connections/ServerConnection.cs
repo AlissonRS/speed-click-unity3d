@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using Boomlagoon.JSON;
-using Alisson.Core.Extensions;
 using Alisson.Core.Repository;
 
 namespace Alisson.Core.Database.Connections
 {
 
-	public class ServerConnection : Connection
+	public class ServerConnection: Connection
 	{
 
 		protected string host = "http://52.25.19.44/api/";
@@ -49,8 +48,8 @@ namespace Alisson.Core.Database.Connections
 			else
 			{
 				JSONObject json = JSONObject.Parse(www.text);
-				this.response.DataType = json.GetValue("Data").Type;
-				this.response.Data = json.GetObject("Data");
+                this.response.Data = json.GetValue("Data");
+                this.response.DataType = this.response.Data.Type;
 				this.response.DataArray = json.GetArray("Data");
 				this.response.Message = json.GetString("Message");
 				this.response.Success = json.GetBoolean("Success");

@@ -66,5 +66,27 @@ public static class SpeedImagerHelpers
 		return range[LastRandomIndex];
 	}
 
+    public static bool IsInternetConnectionAvailable()
+    {
+        if (Network.player.ipAddress.ToString() != "127.0.0.1")
+            return true;
+
+        if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+            return true;
+
+        if (Network.player.ipAddress.ToString() != "127.0.0.1")
+            return true;
+
+        return false;
+    }
+
+    public static T Parse<T>(JSONValue json) where T : IJSONParser
+    {
+        Type t = typeof(T);
+        T obj = (T)Activator.CreateInstance(t);
+        obj.ParseObject(json);
+        return obj;
+    }
+
 }
 		

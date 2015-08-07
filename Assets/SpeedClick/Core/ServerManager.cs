@@ -7,6 +7,7 @@ using Boomlagoon.JSON;
 using System;
 using Alisson.Core.Repository;
 using Alisson.Core.Encryption;
+using Assets.SpeedClick.Core;
 
 namespace Alisson.Core
 {
@@ -20,7 +21,7 @@ namespace Alisson.Core
 
 		public static ConnectionType ConnectionType;
 
-		private static List<Connection> conns = new List<Connection>();
+        private static List<Connection> conns = new List<Connection>();
 
 		void Awake()
 		{
@@ -29,28 +30,17 @@ namespace Alisson.Core
 			conns.Add(localConn);
 		}
 
-		void Start()
-		{
-			StartCoroutine(LoadUsers());
-		}
-
-		
-		IEnumerator LoadUsers()
-		{
-			Connection conn = ServerManager.getConn();
-			yield return StartCoroutine(conn.GetAll("user"));
-			if (!conn.response.Success || conn.response.DataType != JSONValueType.Array)
-				yield break;
-			foreach(JSONValue value in conn.response.DataArray)
-			{
-				User user = new User(value);
-				BaseRepository<User>.add(user);
-			}
-		}
-
+        IEnumerator Start()
+        {
+            yield return StartCoroutine(BaseRepository.getAllFresh<User>());
+            foreach (User user in BaseRepository.getAll<User>())
+                Debug.Log(user.Login);
+        }
 
 		public static Connection getConn(ConnectionType connType)
-		{
+        {
+            if (!SpeedImagerHelpers.IsInternetConnectionAvailable())
+                return conns[(int)ConnectionType.LocalConn];
 			return conns[(int)connType];
 		}
 
@@ -68,12 +58,10 @@ namespace Alisson.Core
 			};
 			yield return StartCoroutine(getConn(ConnectionType.ServerConn).SendRequest("user", type, p));
 			if (getConn(ConnectionType.ServerConn).response.Success)
-			{
-				JSONObject data = getConn(ConnectionType.ServerConn).response.Data;
-				User user = new User(Convert.ToInt32(data.GetNumber("ID")), data.GetString("Login"));
-				LoggedUserID = user.ID;
-				BaseRepository<User>.add(user);
-			}
+            {
+                User user = new User();
+                ServerManager.LoggedUserID = BaseRepository.add<User>(getConn(ConnectionType.ServerConn).response.Data).ID;
+            }
 			MessageDialogManager.ShowDialog(getConn(ConnectionType.ServerConn).response.Message);
 		}
 

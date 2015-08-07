@@ -1,94 +1,100 @@
 ﻿using Alisson.Core;
+using Alisson.Core.Database;
+using Alisson.Core.Repository;
+using Boomlagoon.JSON;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Alisson.Core.Database;
+using System.Text;
 using UnityEngine;
-using Alisson.Core.Database.Connections;
 
-namespace Alisson.Core.Repository
+namespace Assets.SpeedClick.Core
 {
 
-    static public class ConcreteList
-    {
-        static public List<Type> concrete = new List<Type>();
-    }
-
-    public abstract class BaseRepository
-    {
-        public abstract void Clean();
-    }
-
-    public class BaseRepository<T>: BaseRepository where T : BaseObject
+    public class BaseRepository : MonoBehaviour
     {
 
-		protected static List<T> list = new List<T>();
+        public static BaseRepository instance;
 
-        static BaseRepository()
+        void Awake()
         {
-            ConcreteList.concrete.Add(typeof(BaseRepository<T>));
+            if (instance == null)
+                instance = this;
         }
 
-        public static T add(T obj)
+        public static T add<T>() where T: BaseObject
         {
-            if (list.FindIndex(o => o.ID == obj.ID) == -1)
-                list.Add(obj);
+            return add<T>(null);
+        }
+
+        public static T add<T>(JSONValue json) where T : BaseObject
+        {
+            T obj = null;
+            Type t = typeof(T);
+            int ID = Convert.ToInt32(json.Obj.GetNumber("ID"));
+            Debug.Log(ID);
+            if (ID > 0)
+                obj = getById<T>(ID);
+            if (obj == null)
+                obj = new GameObject().AddComponent<T>();
+            if (json != null)
+                obj.ParseObject(json);
+            if (obj.transform.parent != null)
+                return obj;
+            string repoName = t.Name + "Repository";
+            Transform repo = instance.gameObject.transform.FindChild(repoName);
+            if (repo == null)
+            {
+                repo = new GameObject(repoName).transform;
+                repo.parent = instance.transform;
+            }
+            obj.transform.parent = repo;
             return obj;
         }
 
-        public override void Clean()
+        public static void Clear<T>() where T : BaseObject
         {
-            list.Clear();
+            Type t = typeof(T);
+            string repoName = t.Name + "Repository";
+            Transform repo = instance.gameObject.transform.FindChild(repoName);
+            if (repo != null)
+                repo.ClearChildren();
         }
 
-        public static int Count(Func<T, bool> predicate)
+        public static void ClearAll()
         {
-            if (list.Count == 0)
-                getAll();
-            return list.Count(predicate);
+            instance.transform.ClearChildren();
         }
 
-        public static IEnumerable<T> getAll()
+        public static IEnumerable<T> getAll<T>() where T : BaseObject
         {
-            if (list.Count == 0)
-              list = getAllFresh();
-            return list;
+            Type t = typeof(T);
+            string repoName = t.Name + "Repository";
+            Transform repo = instance.gameObject.transform.FindChild(repoName);
+            if (repo != null)
+                return repo.GetComponentsInChildren<T>();
+            return new List<T>();
         }
 
-        public static IEnumerable<T> getAll(Func<T, bool> predicate)
+        public static IEnumerator getAllFresh<T>() where T : BaseObject
         {
-            if (list.Count == 0)
-                list = getAllFresh();
-            return list.Where(predicate);
+            Type t = typeof(T);
+            Connection conn = ServerManager.getConn();
+            yield return instance.StartCoroutine(conn.GetAll(t.Name));
+            if (!conn.response.Success || conn.response.DataType != JSONValueType.Array)
+                yield break;
+            foreach (JSONValue value in conn.response.DataArray)
+                add<T>(value);
         }
-
-        protected static List<T> getAllFresh()
+        public static T getById<T>(int ID) where T : BaseObject
         {
-			return list;
+            IEnumerable<T> objs = getAll<T>().Where<T>(u => u.ID == ID);
+            if (objs.Count() == 1)
+                return objs.First();
+            else
+                return null;
         }
-
-        public static T getByID(int ID)
-        {
-            return getAll(o => o.ID == ID).First();
-        }
-
-        public static T First(Func<T, bool> predicate)
-        {
-            if (list.Count == 0)
-                getAll();
-            return list.First(predicate);
-        }
-
-        public static void Submit(IEnumerable<T> lst)
-        {
-            foreach (T o in lst)
-                add(o);
-        }
-
-        public static void Submit()
-        {
-            Submit(list);
-        }
-
     }
+
 }
