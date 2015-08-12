@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
 using Alisson.Core.Repository;
+using Assets.SpeedClick.Core;
 
 public class ScenesScreen : SpeedImagerScreen {
 	
@@ -17,8 +18,10 @@ public class ScenesScreen : SpeedImagerScreen {
 	{
 		foreach (Transform child in scenesContainer.transform)
 			GameObject.Destroy(child.gameObject);
-		User user = BaseRepository<User>.add(new User(1, "Test User"));
-		IEnumerable<SpeedImagerScene> scenesList = BaseRepository<SpeedImagerScene>.getAll();
+        User user = BaseRepository.add<User>();
+        user.ID = 1;
+        user.Login = "Test User";
+        IEnumerable<SpeedImagerScene> scenesList = BaseRepository.getAll<SpeedImagerScene>();
 		foreach (SpeedImagerScene scene in scenesList) // This should come from a database or http
 		{
 //			scene.Title = String.Format("Scene {00}", scene.ID);
@@ -31,7 +34,6 @@ public class ScenesScreen : SpeedImagerScreen {
 //			for (int j = 1; j < 5; j++)
 //				BaseRepository<SceneRankingItem>.add(new SceneRankingItem(j, user, scene, j * 3324, j * 27));
 
-			BaseRepository<SpeedImagerScene>.add(scene);
 			scenes.Add(scene);
 			GameObject sceneButton = (GameObject) Instantiate(Resources.Load("Prefabs/SceneButton"));
 			Text text = (Text) sceneButton.GetComponentInChildren(typeof(Text));

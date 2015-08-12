@@ -23,7 +23,11 @@ public class LoginCommand : Command
 		btn.interactable = false;
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Get));
 		if (ServerManager.LoggedUserID > 0)
+        {
+            UserPanel.Login();
+            UserPanel.instance.gameObject.SetActive(true);
 			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
+        }
 		btn.interactable = true;
 	}
 

@@ -8,9 +8,7 @@ public static class SpeedImagerHelpers
 {
 
 	public static int LastRandomIndex;
-
-	private static int ModalID;
-	
+    	
 	private static System.Random randomGen = new System.Random();
 	
 	public static JSONValue BuildJSONValue(object value)

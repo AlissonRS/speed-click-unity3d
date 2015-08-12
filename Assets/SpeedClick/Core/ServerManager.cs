@@ -60,7 +60,11 @@ namespace Alisson.Core
 			if (getConn(ConnectionType.ServerConn).response.Success)
             {
                 User user = new User();
-                ServerManager.LoggedUserID = BaseRepository.add<User>(getConn(ConnectionType.ServerConn).response.Data).ID;
+                JSONValue value = getConn(ConnectionType.ServerConn).response.Data;
+                JSONArray scores = value.Obj.GetArray("Scores");
+                foreach (JSONValue item in scores)
+                    BaseRepository.add<Score>(item);
+                ServerManager.LoggedUserID = BaseRepository.add<User>(value).ID;
             }
 			MessageDialogManager.ShowDialog(getConn(ConnectionType.ServerConn).response.Message);
 		}

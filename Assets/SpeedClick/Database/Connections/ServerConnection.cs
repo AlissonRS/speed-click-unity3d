@@ -19,13 +19,15 @@ namespace Alisson.Core.Database.Connections
 		public override IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
 			string url = host + controller;
-			WWWForm form = new WWWForm();
+            WWW www = null;
 			if (p != null)
 			{
 				if (t == HttpMethodType.Post)
-				{
+                {
+                    WWWForm form = new WWWForm();
 					foreach(KeyValuePair<string, object> pair in p)
-						form.AddField(pair.Key, pair.Value.ToString());
+                        form.AddField(pair.Key, pair.Value.ToString());
+                    www = new WWW(url, form);
 				}
 				else if (t == HttpMethodType.Get)
 				{
@@ -33,8 +35,8 @@ namespace Alisson.Core.Database.Connections
 					url +=  SpeedImagerHelpers.BuildURLParam(p);
 				}
 			}
-
-			WWW www = new WWW(url, form);
+            if (www == null)
+                www = new WWW(url);
 			yield return www;
 
 			this.response = new ResponseData();

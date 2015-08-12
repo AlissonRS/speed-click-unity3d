@@ -14,6 +14,7 @@ public class SpeedImagerDirector : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		SpeedImagerScreen[] scrs = GameObject.FindObjectsOfType<SpeedImagerScreen>();
 		foreach (SpeedImagerScreen scr in scrs) {
 			var rect = scr.gameObject.GetComponent<RectTransform>();

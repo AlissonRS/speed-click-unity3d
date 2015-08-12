@@ -11,7 +11,9 @@ using Assets.SpeedClick.Core;
 public class User : BaseObject
 {
 
-	public string Login;
+    public string Login;
+    public int Ranking;
+    public int Score;
 
 	public Sprite GetAvatar()
 	{
