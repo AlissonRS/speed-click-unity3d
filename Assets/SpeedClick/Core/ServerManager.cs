@@ -5,7 +5,6 @@ using Alisson.Core.Database;
 using Alisson.Core.Database.Connections;
 using Boomlagoon.JSON;
 using System;
-using Alisson.Core.Repository;
 using Alisson.Core.Encryption;
 using Assets.SpeedClick.Core;
 
@@ -49,6 +48,14 @@ namespace Alisson.Core
 			return getConn(ConnectionType);
 		}
 
+        public IEnumerator LoadImageIntoSprite(ISpritable spritable, string url)
+        {
+            yield return StartCoroutine(getConn(ConnectionType.ServerConn).LoadImageIntoTexture(url));
+            ResponseData response = getConn(ConnectionType.ServerConn).response;
+			if (response.Success)
+                spritable.LoadSprite(response.DownloadedSprite);
+        }
+
 		public IEnumerator Login(string login, string password, HttpMethodType type)
 		{
 			string encrypted = StringCipher.Encrypt(password,StringCipher.SecretMessage);
@@ -57,16 +64,17 @@ namespace Alisson.Core
 				{"password", encrypted}
 			};
 			yield return StartCoroutine(getConn(ConnectionType.ServerConn).SendRequest("user", type, p));
-			if (getConn(ConnectionType.ServerConn).response.Success)
+            ResponseData response = getConn(ConnectionType.ServerConn).response;
+			if (response.Success)
             {
                 User user = new User();
-                JSONValue value = getConn(ConnectionType.ServerConn).response.Data;
+                JSONValue value = response.Data;
                 JSONArray scores = value.Obj.GetArray("Scores");
                 foreach (JSONValue item in scores)
                     BaseRepository.add<Score>(item);
                 ServerManager.LoggedUserID = BaseRepository.add<User>(value).ID;
             }
-			MessageDialogManager.ShowDialog(getConn(ConnectionType.ServerConn).response.Message);
+			MessageDialogManager.ShowDialog(response.Message);
 		}
 
 	}

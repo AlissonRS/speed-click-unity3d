@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using Boomlagoon.JSON;
-using Alisson.Core.Repository;
 
 namespace Alisson.Core.Database.Connections
 {
@@ -15,6 +14,30 @@ namespace Alisson.Core.Database.Connections
 		protected string host = "http://52.25.19.44/api/";
 		protected string controller = "";
 		protected string method = "";
+
+        public override IEnumerator LoadImageIntoTexture(string url)
+        {
+            Texture2D texture = new Texture2D(4, 4, TextureFormat.DXT5, false);
+            WWW www = new WWW(url);
+            yield return www;
+            www.LoadImageIntoTexture(texture);
+
+            this.response = new ResponseData();
+            if (!String.IsNullOrEmpty(www.error))
+            {
+                this.response.Message = "Não foi possível acessar a imagem!";
+                yield break;
+            }
+            if (www.size <= 2)
+                yield break;
+            else
+            {
+                this.response.DownloadedSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                this.response.Message = "";
+                this.response.Success = true;
+            }
+
+        }
 
 		public override IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{

@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Alisson.Core;
-using Alisson.Core.Repository;
 using Assets.SpeedClick.Core;
 
 public class SceneRankingItem: BaseObject

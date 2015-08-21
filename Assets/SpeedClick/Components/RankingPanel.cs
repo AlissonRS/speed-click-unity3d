@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using Alisson.Core.Repository;
 using System.Linq;
 using Assets.SpeedClick.Core;
 using System.Collections.Generic;

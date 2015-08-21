@@ -12,6 +12,11 @@ namespace Alisson.Core.Database
 		
 		public ResponseData response = new ResponseData();
 
+        public virtual IEnumerator LoadImageIntoTexture(string url)
+        {
+            yield break;
+        }
+
         public virtual IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
 			yield break;

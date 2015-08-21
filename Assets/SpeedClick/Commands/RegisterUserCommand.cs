@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using Alisson.Core.Repository;
 using Alisson.Core;
 using Alisson.Core.Encryption;
 using System.Text;

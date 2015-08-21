@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using Alisson.Core.Repository;
 
 namespace Alisson.Core.Database.Connections
 {

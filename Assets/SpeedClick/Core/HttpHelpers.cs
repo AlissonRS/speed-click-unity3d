@@ -11,6 +11,7 @@ namespace Alisson.Core
         public JSONValue Data;
 		public JSONArray DataArray;
 		public JSONValueType DataType;
+        public Sprite DownloadedSprite;
 		public string Message = "";
 		public bool Success = false;
 		

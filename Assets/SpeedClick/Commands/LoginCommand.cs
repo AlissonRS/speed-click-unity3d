@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using Alisson.Core;
-using Alisson.Core.Repository;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Alisson.Core.Encryption;
+using Assets.SpeedClick.Core;
 
 public class LoginCommand : Command
 {
@@ -16,6 +16,8 @@ public class LoginCommand : Command
 
 	public ServerManager server;
 
+    public UserAvatarLoader loader;
+
 	
 	public override IEnumerator Execute(SIComponent component)
 	{
@@ -24,6 +26,8 @@ public class LoginCommand : Command
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Get));
 		if (ServerManager.LoggedUserID > 0)
         {
+            User user = BaseRepository.getAll<User>().Where(u => u.ID == ServerManager.LoggedUserID).First();
+            StartCoroutine(loader.Load(user));
             UserPanel.Login();
             UserPanel.instance.gameObject.SetActive(true);
 			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
