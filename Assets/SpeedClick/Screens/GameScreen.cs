@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class GameScreen : SpeedImagerScreen {
 
-	public SpeedImagerScene scene;
+	public Scene scene;
 
 	private int Combo = 0;
 	private int Points = 0;

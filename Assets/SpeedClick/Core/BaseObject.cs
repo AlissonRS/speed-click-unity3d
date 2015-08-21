@@ -5,6 +5,7 @@ using System.Reflection;
 using System;
 using System.Linq;
 using Boomlagoon.JSON;
+using Assets.SpeedClick.Core;
 
 namespace Alisson.Core
 {
@@ -20,7 +21,7 @@ namespace Alisson.Core
             this.gameObject.name = String.Format("{0}_{1}", this.getTableName(), this.ID);
         }
 
-		public void ParseObject(JSONValue json)
+		public virtual void ParseObject(JSONValue json)
 		{
 			JSONObject jsonObj = json.Obj;
 			IEnumerable<FieldInfo> info = this.GetType().GetFields();
@@ -40,12 +41,18 @@ namespace Alisson.Core
 					case TypeCode.Boolean: field.SetValue(this, jsonObj.GetBoolean(field.Name)); break;
 					case TypeCode.DateTime: field.SetValue(this, Convert.ToDateTime(jsonObj.GetNumber(field.Name))); break;
 					case TypeCode.String: field.SetValue(this, jsonObj.GetString(field.Name)); break;
+                    case TypeCode.Object: this.ParseObjectField(jsonObj.GetValue(field.Name), field); break;
 					default: field.SetValue(this, Convert.ChangeType(jsonObj.GetString(field.Name), field.FieldType)); break;
 					}
 				}
 			}
             this.DefineGameObjectName();
 		}
+
+        public virtual void ParseObjectField(JSONValue json, FieldInfo field)
+        {
+
+        }
 
 		public virtual string getTableName()
 		{

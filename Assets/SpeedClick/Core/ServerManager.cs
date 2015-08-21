@@ -29,13 +29,6 @@ namespace Alisson.Core
 			conns.Add(localConn);
 		}
 
-        IEnumerator Start()
-        {
-            yield return StartCoroutine(BaseRepository.getAllFresh<User>());
-            foreach (User user in BaseRepository.getAll<User>())
-                Debug.Log(user.Login);
-        }
-
 		public static Connection getConn(ConnectionType connType)
         {
             if (!SpeedImagerHelpers.IsInternetConnectionAvailable())

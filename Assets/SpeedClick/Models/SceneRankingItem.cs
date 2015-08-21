@@ -17,9 +17,9 @@ public class SceneRankingItem: BaseObject
         return BaseRepository.getById<User>(this.UserID);
 	}
 
-	public SpeedImagerScene GetScene()
+	public Scene GetScene()
 	{
-        return BaseRepository.getById<SpeedImagerScene>(this.SceneID);
+        return BaseRepository.getById<Scene>(this.SceneID);
 	}
 
 }

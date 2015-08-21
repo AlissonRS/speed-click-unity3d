@@ -8,11 +8,11 @@ public class LoadSceneCommand : Command
 	
 	public SceneDetailsPanel ScenePanel;
 	public RankingPanel Ranking;
-	public static SpeedImagerScene scene;
+	public static Scene scene;
 
 	public override IEnumerator Execute(SIComponent component)
 	{
-		SpeedImagerScene sc = component.GetData<SpeedImagerScene>("scene");
+		Scene sc = component.GetData<Scene>("scene");
 		if (scene == null || sc.ID != scene.ID)
 		{
 			scene = sc;
@@ -25,7 +25,7 @@ public class LoadSceneCommand : Command
 
 	public IEnumerator ShowSceneDetails()
 	{
-        User user = BaseRepository.getById<User>(scene.UserID);
+        User user = scene.Creator;
 		this.ScenePanel.Title.text = scene.Title;
 		this.ScenePanel.Properties.text = scene.GetProperties();
 		this.ScenePanel.Author.text = "Criada por " + user.Login;

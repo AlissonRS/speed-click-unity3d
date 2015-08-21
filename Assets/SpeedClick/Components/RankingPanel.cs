@@ -10,7 +10,7 @@ public class RankingPanel : MonoBehaviour
 	
 	public VerticalLayoutGroup RankingList;
 
-	public IEnumerator SetScene(SpeedImagerScene scene)
+	public IEnumerator SetScene(Scene scene)
 	{
 		foreach (Transform child in RankingList.transform)
 			GameObject.Destroy(child.gameObject);

@@ -6,8 +6,11 @@ using System;
 using System.Linq;
 using System.IO;
 using Alisson.Core;
+using Boomlagoon.JSON;
+using System.Reflection;
+using Assets.SpeedClick.Core;
 
-public class SpeedImagerScene: BaseObject {
+public class Scene: BaseObject {
 
 	public float HP; // How fast the HP decreases...
 	public string Instructions;
@@ -15,7 +18,8 @@ public class SpeedImagerScene: BaseObject {
 	public string Title;
 	public float TurnLength; // In secs...
 	public int Turns; // How much turns the player has to play before we change the source images...
-	public int UserID;
+    public int ImageCount; // How many images we need to get from server....can't be the list count ;)
+    public User Creator;
 	
 	private List<Sprite> _images = new List<Sprite>();
 
@@ -35,7 +39,7 @@ public class SpeedImagerScene: BaseObject {
 
 	public string GetProperties()
 	{
-		return String.Format("Itens: {0} - HP: {0} - TL: {0} - SL: {0} - TC: {0}", this.Images.Count, this.HP, this.TurnLength, this.SceneLength, this.Turns);
+		return String.Format("Itens: {0} - HP: {1} - TL: {2} - SL: {3} - TC: {4}", this.Images.Count, this.HP, this.TurnLength, this.SceneLength, this.Turns);
 	}
 
 	public float IncreaseHPAmount(float max)
@@ -76,6 +80,12 @@ public class SpeedImagerScene: BaseObject {
 //			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
 //		}
 //	}
+
+    public override void ParseObjectField(JSONValue json, FieldInfo field)
+    {
+        if (field.Name == "Creator")
+            this.Creator = BaseRepository.add<User>(json);
+    }
 
 	public int Points()
 	{

@@ -32,7 +32,6 @@ namespace Assets.SpeedClick.Core
             T obj = null;
             Type t = typeof(T);
             int ID = Convert.ToInt32(json.Obj.GetNumber("ID"));
-            Debug.Log(ID);
             if (ID > 0)
                 obj = getById<T>(ID);
             if (obj == null)
@@ -91,8 +90,7 @@ namespace Assets.SpeedClick.Core
             IEnumerable<T> objs = getAll<T>().Where<T>(u => u.ID == ID);
             if (objs.Count() == 1)
                 return objs.First();
-            else
-                return null;
+            return null;
         }
     }
 
