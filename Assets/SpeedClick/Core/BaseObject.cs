@@ -41,15 +41,16 @@ namespace Alisson.Core
 					case TypeCode.Boolean: field.SetValue(this, jsonObj.GetBoolean(field.Name)); break;
 					case TypeCode.DateTime: field.SetValue(this, Convert.ToDateTime(jsonObj.GetNumber(field.Name))); break;
 					case TypeCode.String: field.SetValue(this, jsonObj.GetString(field.Name)); break;
-                    case TypeCode.Object: this.ParseObjectField(jsonObj.GetValue(field.Name), field); break;
+                    case TypeCode.Object: break;
 					default: field.SetValue(this, Convert.ChangeType(jsonObj.GetString(field.Name), field.FieldType)); break;
 					}
 				}
 			}
+            this.ParseObjectField(jsonObj);
             this.DefineGameObjectName();
 		}
 
-        public virtual void ParseObjectField(JSONValue json, FieldInfo field)
+        public virtual void ParseObjectField(JSONObject json)
         {
 
         }
@@ -67,7 +68,7 @@ namespace Alisson.Core
 			foreach(FieldInfo field in fields)
 			{
 				if (field.GetValue(this) != null)
-					obj.Add(field.Name, SpeedImagerHelpers.BuildJSONValue(field.GetValue(this)));
+					obj.Add(field.Name, SpeedClickHelpers.BuildJSONValue(field.GetValue(this)));
 			}
 			return obj;
 		}

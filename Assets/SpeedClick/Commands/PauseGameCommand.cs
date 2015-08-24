@@ -33,13 +33,14 @@ public class PauseGameCommand : Command {
 	public void Exit()
 	{
 		this.screen.IsPaused = false;
-		this.screen.IsLoaded = false;
+        this.screen.IsLoaded = false;
 		this.screen.DoCountDown = true;
 		SpeedImagerDirector.ShowScreen(Screens.ScenesScreen);
 	}
 
 	public void Pause()
 	{
+        UserPanel.Alpha = 1;
 		this.screen.IsPaused = true;
 		SpeedImagerDirector.ShowScreen(Screens.PauseScreen, false);
 		screen.Fade(fadePercent / 100f);
@@ -47,8 +48,9 @@ public class PauseGameCommand : Command {
 	
 	public void Restart()
 	{
-		this.screen.IsPaused = false;
-		this.screen.IsLoaded = false;
+        this.screen.IsPaused = false;
+        this.screen.IsLoaded = false;
+        this.screen.DoCountDown = true;
 		SpeedImagerDirector.ShowScreen(Screens.GameScreen);
 	}
 	

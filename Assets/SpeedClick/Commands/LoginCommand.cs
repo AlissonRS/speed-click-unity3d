@@ -27,9 +27,9 @@ public class LoginCommand : Command
 		if (ServerManager.LoggedUserID > 0)
         {
             User user = BaseRepository.getAll<User>().Where(u => u.ID == ServerManager.LoggedUserID).First();
-            StartCoroutine(loader.Load(user));
+            yield return StartCoroutine(loader.Load(user));
             UserPanel.Login();
-            UserPanel.instance.gameObject.SetActive(true);
+            UserPanel.Alpha = 1;
 			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
         }
 		btn.interactable = true;

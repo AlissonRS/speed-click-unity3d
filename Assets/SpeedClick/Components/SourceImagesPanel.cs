@@ -7,29 +7,37 @@ using System;
 public class SourceImagesPanel : MonoBehaviour
 {
 
+    public static SourceImagesPanel instance;
+
 	public HorizontalLayoutGroup upperContainer;
 	public HorizontalLayoutGroup lowerContainer;
 	
 	public HorizontalLayoutGroup upperImages;
 	public HorizontalLayoutGroup lowerImages;
 
-	private static int maxImages = 10;
+    public List<Image> Images = new List<Image>();
+
+    void Start()
+    {
+        if (instance == null)
+            instance = this;
+        this.ClearImages();
+    }
 
 	private void ClearImages()
 	{
+        Images.Clear();
 		foreach (Transform child in this.upperImages.transform)
 			GameObject.Destroy(child.gameObject);
 		foreach (Transform child in this.lowerImages.transform)
 			GameObject.Destroy(child.gameObject);
 	}
 
-	public List<Image> LoadImages(List<Sprite> imgs)
+	public void LoadImages(List<Sprite> imgs)
 	{
 		this.ClearImages();
 
-		List<Image> result = new List<Image>();
-
-		bool useUpperPanel = imgs.Count > maxImages / 2;
+        bool useUpperPanel = imgs.Count > Constants.MAX_SOURCE_IMAGES / 2;
 		this.upperImages.gameObject.SetActive(useUpperPanel);
 
 		int i = 0;
@@ -42,7 +50,7 @@ public class SourceImagesPanel : MonoBehaviour
 			sourceImagePrefab.name = String.Format("sourceImage_{0}",i);
 			if (useUpperPanel)
 			{
-				if (i < maxImages / 2)
+                if (i < Constants.MAX_SOURCE_IMAGES / 2)
 					sourceImagePrefab.transform.SetParent(upperImages.transform, false);
 				else
 					sourceImagePrefab.transform.SetParent(lowerImages.transform, false);
@@ -51,10 +59,9 @@ public class SourceImagesPanel : MonoBehaviour
 				sourceImagePrefab.transform.SetParent(lowerImages.transform, false);
 
 
-			result.Add(handler.childImage);
+            Images.Add(handler.childImage);
 			i++;
 		}
-		return result;
 	}
 
 }

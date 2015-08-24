@@ -11,12 +11,12 @@ namespace Alisson.Core.Database.Connections
 	public class ServerConnection: Connection
 	{
 
-		protected string host = "http://52.25.19.44/api/";
 		protected string controller = "";
 		protected string method = "";
 
-        public override IEnumerator LoadImageIntoTexture(string url)
+        public override IEnumerator LoadImageIntoTexture(string file)
         {
+            string url = Constants.SERVER_IMAGES_URL + file;
             Texture2D texture = new Texture2D(4, 4, TextureFormat.DXT5, false);
             WWW www = new WWW(url);
             yield return www;
@@ -41,7 +41,7 @@ namespace Alisson.Core.Database.Connections
 
 		public override IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
-			string url = host + controller;
+            string url = Constants.SERVER_API_URL + controller;
             WWW www = null;
 			if (p != null)
 			{
@@ -55,7 +55,7 @@ namespace Alisson.Core.Database.Connections
 				else if (t == HttpMethodType.Get)
 				{
 					url += "?";
-					url +=  SpeedImagerHelpers.BuildURLParam(p);
+					url +=  SpeedClickHelpers.BuildURLParam(p);
 				}
 			}
             if (www == null)

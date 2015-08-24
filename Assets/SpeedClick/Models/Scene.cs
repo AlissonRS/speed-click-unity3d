@@ -10,7 +10,8 @@ using Boomlagoon.JSON;
 using System.Reflection;
 using Assets.SpeedClick.Core;
 
-public class Scene: BaseObject {
+public class Scene: BaseObject, ISpritable
+{
 
 	public float HP; // How fast the HP decreases...
 	public string Instructions;
@@ -18,19 +19,25 @@ public class Scene: BaseObject {
 	public string Title;
 	public float TurnLength; // In secs...
 	public int Turns; // How much turns the player has to play before we change the source images...
-    public int ImageCount; // How many images we need to get from server....can't be the list count ;)
+    public int SourceImageCount; // How many source images we need to get from server.
+    public int TargetImageCount; // How many target images we need to get from server. It can be zero if source and target are the same...
+    public bool UseCustomTargetImages;
     public User Creator;
-	
-	private List<Sprite> _images = new List<Sprite>();
 
-	public List<Sprite> Images
-	{
-		get {
-			if (this._images.Count == 0)
-				this.LoadImages();
-			return this._images;
-		}
-	}
+    private List<Sprite> _sourceImages = new List<Sprite>();
+    private List<Sprite> _targetImages = new List<Sprite>();
+
+	public List<Sprite> SourceImages { get { return this._sourceImages; } }
+
+    public List<Sprite> TargetImages
+    {
+        get
+        {
+            if (this.UseCustomTargetImages)
+                return this._targetImages;
+            return this.SourceImages;
+        }
+    }
 
 	public float DecreaseHPAmount(float max)
 	{
@@ -38,8 +45,10 @@ public class Scene: BaseObject {
 	}
 
 	public string GetProperties()
-	{
-		return String.Format("Itens: {0} - HP: {1} - TL: {2} - SL: {3} - TC: {4}", this.Images.Count, this.HP, this.TurnLength, this.SceneLength, this.Turns);
+    {
+        int tic = this.TargetImageCount == 0 ? this.SourceImageCount : this.TargetImageCount;
+        return String.Format("SI {0} - TI {1} - HP {2}\nTL {3} - SL {4} - TC {5}", this.SourceImageCount, tic, this.HP, this.TurnLength, this.SceneLength, this.Turns);
+        //return String.Format("SourceImages: {0} - TargetImages: - HP: {1} - TurnLength: {2} - SceneLength: {3} - TurnCount: {4}", this.SourceImageCount, this.TargetImageCount, this.HP, this.TurnLength, this.SceneLength, this.Turns);
 	}
 
 	public float IncreaseHPAmount(float max)
@@ -47,49 +56,36 @@ public class Scene: BaseObject {
 		return max * (1f / Convert.ToSingle(Math.Pow(this.HP,2f))); // The more the HP, the less it increases...
 	}
 
-	private void LoadImages()
-	{
-//		if (Application.platform == RuntimePlatform.Android)
-			LoadImagesFromAssets();
-//		else
-//			LoadImagesFromDir();
-	}
-
-	private void LoadImagesFromAssets()
-	{
-		string place = String.Format("Scenes/{000}", this.ID.ToString("D3"));
-		Sprite[] sprites = Resources.LoadAll <Sprite> (place); 
-		foreach (Sprite sprite in sprites) {
-			_images.Add(sprite);
-		}
-//		_images = (List<Sprite>) sprites.ToList();
-	}
-
-//	private void LoadImagesFromDir()
-//	{
-//		string path = String.Format("c:/SpeedImager/Scenes/{0}/", this.ID.ToString("D3"));
-//		string url = String.Format("file:///c:/SpeedImager/Scenes/{0}/", this.ID.ToString("D3"));
-//		DirectoryInfo dir = new DirectoryInfo(path);
-//		FileInfo[] info = dir.GetFiles("*.*");
-//		foreach (FileInfo f in info) 
-//		{
-//			// Start a download of the given URL
-//			WWW www = new WWW (url + f.Name);
-//			// Wait for download to complete
-//			//			yield www;
-//			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
-//		}
-//	}
-
-    public override void ParseObjectField(JSONValue json, FieldInfo field)
+    public override void ParseObjectField(JSONObject json)
     {
-        if (field.Name == "Creator")
-            this.Creator = BaseRepository.add<User>(json);
+        if (json.GetValue("Creator") != null)
+            this.Creator = BaseRepository.add<User>(json.GetValue("Creator"));
+        JSONArray scores = json.GetArray("Scores");
+        foreach (JSONValue item in scores)
+            BaseRepository.add<Score>(item);
     }
 
 	public int Points()
 	{
 		return 100;
 	}
+
+    public void LoadSprite(Sprite sprite)
+    {
+        if (this.SourceImages.Count < this.SourceImageCount)
+            this.SourceImages.Add(sprite);
+        else
+            this.TargetImages.Add(sprite);
+    }
+
+    public bool SourceImagesLoaded()
+    {
+        return this.SourceImages.Count == this.SourceImageCount;
+    }
+
+    public bool TargetImagesLoaded()
+    {
+        return this.UseCustomTargetImages ? this.TargetImages.Count == this.TargetImageCount : this.SourceImagesLoaded();
+    }
 
 }

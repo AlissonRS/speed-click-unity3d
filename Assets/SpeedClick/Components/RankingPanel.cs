@@ -16,7 +16,7 @@ public class RankingPanel : MonoBehaviour
 			GameObject.Destroy(child.gameObject);
 
         IEnumerable<SceneRankingItem> items = BaseRepository.getAll<SceneRankingItem>();
-        if (items.Count() == 0)
+        if (items.Count() == 0 || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {
             yield return StartCoroutine(BaseRepository.getAllFresh<SceneRankingItem>());
             items = BaseRepository.getAll<SceneRankingItem>();

@@ -16,7 +16,7 @@ public static class SpeedClickExtensions
 	{
 		JSONObject obj = new JSONObject();
 		foreach(KeyValuePair<string, object> pair in d)
-			obj.Add(pair.Key, SpeedImagerHelpers.BuildJSONValue(pair.Value));
+			obj.Add(pair.Key, SpeedClickHelpers.BuildJSONValue(pair.Value));
 		return obj;
 	}
 	public static void ClearChildren(this Transform t)

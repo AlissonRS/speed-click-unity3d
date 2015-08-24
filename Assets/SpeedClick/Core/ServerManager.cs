@@ -13,6 +13,7 @@ namespace Alisson.Core
 
 	public class ServerManager: MonoBehaviour {
 
+        public static ServerManager instance;
 		public ServerConnection serverConn;
 		public LocalConnection localConn;
 
@@ -24,6 +25,8 @@ namespace Alisson.Core
 
 		void Awake()
 		{
+            if (instance == null)
+                instance = this;
 			ConnectionType = ConnectionType.ServerConn;
 			conns.Add(serverConn);
 			conns.Add(localConn);
@@ -31,7 +34,7 @@ namespace Alisson.Core
 
 		public static Connection getConn(ConnectionType connType)
         {
-            if (!SpeedImagerHelpers.IsInternetConnectionAvailable())
+            if (!SpeedClickHelpers.IsInternetConnectionAvailable())
                 return conns[(int)ConnectionType.LocalConn];
 			return conns[(int)connType];
 		}
@@ -62,14 +65,42 @@ namespace Alisson.Core
             {
                 User user = new User();
                 JSONValue value = response.Data;
-                JSONArray scores = value.Obj.GetArray("Scores");
-                foreach (JSONValue item in scores)
-                    BaseRepository.add<Score>(item);
                 ServerManager.LoggedUserID = BaseRepository.add<User>(value).ID;
             }
 			MessageDialogManager.ShowDialog(response.Message);
 		}
 
-	}
+
+        public IEnumerator SendScore(Score score)
+        {
+            Dictionary<string, object> p = new Dictionary<string, object>(){
+				{"ID", -1},
+				{"Accuracy", score.Accuracy},
+                {"MaxCombo", score.MaxCombo},
+                {"MissCount", score.MissCount},
+                {"Platform", score.Platform},
+                {"PlayerId", score.PlayerId},
+                {"Points", score.Points},
+                {"Ranking", 0},
+                {"SceneId", score.SceneId},
+                {"Speed", score.Speed},
+                {"TurnCount", score.TurnCount}
+			};
+            yield return StartCoroutine(getConn(ConnectionType.ServerConn).SendRequest("score", HttpMethodType.Post, p));
+
+            ResponseData response = getConn(ConnectionType.ServerConn).response;
+            if (response.Success)
+            {
+                JSONValue value = response.Data;
+                if (value.Obj.GetBoolean("IsNewRecord"))
+                {
+                    score.ID = Convert.ToInt32(value.Obj.GetNumber("ID"));
+                    score.Ranking = Convert.ToInt32(value.Obj.GetNumber("Ranking"));
+                }
+            }
+            else
+                MessageDialogManager.ShowDialog(response.Message);
+        }
+    }
 
 }

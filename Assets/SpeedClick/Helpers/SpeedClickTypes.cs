@@ -12,7 +12,9 @@ public enum Screens {
 	GameScreen,
 	PauseScreen,
 	LoginScreen,
-	RegisterScreen}
+	RegisterScreen,
+    LoadingScreen,
+    ScoreScreen}
 
 public enum GameJoystickButtons
 {
@@ -25,6 +27,8 @@ public enum GameJoystickButtons
 	Image6,
 	Image7,
 	Image8,
+    Image9,
+    Image10,
 	MouseKey
 }
 
@@ -47,3 +51,13 @@ public enum HttpMethodType
 	Delete
 }
 
+public enum Platforms: int
+{
+    WebGLPlayer,
+    WebPlayer,
+    IPhonePlayer,
+    Android,
+    WindowsPlayer,
+    LinuxPlayer,
+    OSXPlayer
+}

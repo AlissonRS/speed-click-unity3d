@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class MessageDialogManager : MonoBehaviour
+public class MessageDialogManager : MonoBehaviour, IPointerClickHandler
 {
 
 	public float _messageCurrentLifeTime;
@@ -22,13 +23,15 @@ public class MessageDialogManager : MonoBehaviour
 		{
 			if (value > 1)
 				this.canvasGroup.alpha = 1;
-			else if (value < 0)
+			else if (value <= 0)
 			{
-				this.canvasGroup.alpha = 0;
+                this.canvasGroup.alpha = 0;
+                this.show = false;
+                this.keepAlive = false;
 				this.gameObject.SetActive(false);
 			}
-			else
-				this.canvasGroup.alpha = value;
+            else
+                this.canvasGroup.alpha = value;
 		}
 	}
 
@@ -50,11 +53,13 @@ public class MessageDialogManager : MonoBehaviour
 	public static MessageDialogManager instance;
 
 	public Text message;
+    private bool keepAlive;
 
 	public void Start()
 	{
 		if (instance == null)
 			instance = this;
+        instance.keepAlive = false;
 		instance.show = false;
 		instance.fadeTime = 1;
 		instance.messageLifeTime = 3;
@@ -64,29 +69,41 @@ public class MessageDialogManager : MonoBehaviour
 		instance.gameObject.SetActive(false);
 	}
 
-	public static void ShowDialog(string message)
+	public static void ShowDialog(string message, bool keepAlive = false)
 	{
 		instance.message.text = message;
 		instance.gameObject.SetActive(true);
 		instance.show = true;
+        instance.keepAlive = keepAlive;
 	}
 
 	public void Update()
 	{
 		if (instance == null) return;
-		if (instance.alpha == 0 && !instance.show) // If it's invisible, we proceed only if we wanna show...
+		if (instance.alpha == 0f && !instance.show) // If it's invisible, we proceed only if we wanna show...
 			return;
-		if (instance.alpha == 1 && instance.show && instance.MessageCurrentLifeTime <= instance.messageLifeTime) // When message is fully shown, we start counting its current life time
+		if (instance.alpha == 1f && instance.show && instance.MessageCurrentLifeTime <= instance.messageLifeTime) // When message is fully shown, we start counting its current life time
 		{
 			instance.MessageCurrentLifeTime += Time.deltaTime; // When it surpasses the messageLimeTime, it sets itself to zero and change show flag to false, so we won't increase it anymore, keeping zero...
 			return;
 		}
-		float value = (1 / instance.fadeTime * Time.deltaTime); // we calculate the value amount to be increased/decreased.
+
+		float value = (1f / instance.fadeTime * Time.deltaTime); // we calculate the value amount to be increased/decreased.
 		if (instance.show)
-			instance.alpha += value;
-		else
-			instance.alpha -= value;
+			instance.alpha += value; // Fading in
+		else if (!instance.keepAlive)
+			instance.alpha -= value; // Fading out
 	}
 
+
+    internal static void Close()
+    {
+        instance.alpha = 0;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Close();
+    }
 }
 

@@ -31,9 +31,12 @@ namespace Assets.SpeedClick.Core
         {
             T obj = null;
             Type t = typeof(T);
-            int ID = Convert.ToInt32(json.Obj.GetNumber("ID"));
-            if (ID > 0)
-                obj = getById<T>(ID);
+            if (json != null)
+            {
+                int ID = Convert.ToInt32(json.Obj.GetNumber("ID"));
+                if (ID > 0)
+                    obj = getById<T>(ID);
+            }
             if (obj == null)
                 obj = new GameObject().AddComponent<T>();
             if (json != null)

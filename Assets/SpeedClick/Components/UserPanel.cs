@@ -9,17 +9,22 @@ public class UserPanel : MonoBehaviour, IObserver<User> {
 
     public static UserPanel instance;
 
+    private static CanvasGroup canvas;
+
     public Image Avatar;
     public Text Nick;
     public Text Ranking;
     public Text Score;
     public User Player;
+    public static float Alpha { get { return canvas.alpha; } set { canvas.alpha = value; } }
 
 	// Use this for initialization
 	void Start () {
         if (instance == null)
             instance = this;
-        instance.gameObject.SetActive(false);
+        if (canvas == null)
+            canvas = this.GetComponent<CanvasGroup>();
+        canvas.alpha = 0;
 	}
 
     internal static void Login()
@@ -49,4 +54,5 @@ public class UserPanel : MonoBehaviour, IObserver<User> {
             instance.Player = value;
         }
     }
+
 }

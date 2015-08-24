@@ -14,7 +14,7 @@ public class UserAvatarLoader: MonoBehaviour
 
     public IEnumerator Load(User user)
     {
-        string url = String.Format("http://52.25.19.44/img/users/{0}.png", user.ID.ToString("D8"));
+        string url = String.Format("users/{0}.png", user.ID.ToString("D8"));
         yield return StartCoroutine(server.LoadImageIntoSprite(user, url));
     }
 

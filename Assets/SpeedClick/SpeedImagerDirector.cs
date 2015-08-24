@@ -62,9 +62,9 @@ public class SpeedImagerDirector : MonoBehaviour {
 			screens[currentScreenIndex].IsVisible = false;
 		else
 			screens[currentScreenIndex].SetInteractable(false);
-		currentScreenIndex = (int)activeScreen.ScreenIndex;
+        currentScreenIndex = (int)activeScreen.ScreenIndex;
+        activeScreen.IsVisible = true;
 		activeScreen.LoadScreen();
-		activeScreen.IsVisible = true;
 	}
 
 }

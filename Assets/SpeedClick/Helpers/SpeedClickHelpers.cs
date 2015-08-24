@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Boomlagoon.JSON;
 
-public static class SpeedImagerHelpers
+public static class SpeedClickHelpers
 {
 
 	public static int LastRandomIndex;
@@ -72,9 +72,6 @@ public static class SpeedImagerHelpers
         if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
             return true;
 
-        if (Network.player.ipAddress.ToString() != "127.0.0.1")
-            return true;
-
         return false;
     }
 
@@ -84,6 +81,25 @@ public static class SpeedImagerHelpers
         T obj = (T)Activator.CreateInstance(t);
         obj.ParseObject(json);
         return obj;
+    }
+
+    public static Platforms ConvertPlatformType(RuntimePlatform type)
+    {
+        switch(type)
+        {
+            case RuntimePlatform.OSXEditor: return Platforms.OSXPlayer;
+            case RuntimePlatform.OSXPlayer: return Platforms.OSXPlayer;
+            case RuntimePlatform.WindowsPlayer: return Platforms.WindowsPlayer;
+            case RuntimePlatform.OSXWebPlayer: return Platforms.WebPlayer;
+            case RuntimePlatform.OSXDashboardPlayer: return Platforms.OSXPlayer;
+            case RuntimePlatform.WindowsWebPlayer: return Platforms.WindowsPlayer;
+            case RuntimePlatform.WindowsEditor: return Platforms.WindowsPlayer;
+            case RuntimePlatform.IPhonePlayer: return Platforms.IPhonePlayer;
+            case RuntimePlatform.Android: return Platforms.Android;
+            case RuntimePlatform.LinuxPlayer: return Platforms.LinuxPlayer;
+            case RuntimePlatform.WebGLPlayer: return Platforms.WebGLPlayer;
+            default: throw new InvalidOperationException("Tipo de player não suportado!");
+        }
     }
 
 }
