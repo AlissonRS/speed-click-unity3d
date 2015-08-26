@@ -5,11 +5,11 @@ using System;
 public class ShowScreenCommand : Command
 {
 	
-	public SpeedImagerScreen TargetScreen;
+	public SpeedClickScreen TargetScreen;
 	
-	public override IEnumerator Execute(SIComponent c)
+	public override IEnumerator ExecuteAsCoroutine()
 	{
-		SpeedImagerDirector.ShowScreen(TargetScreen, true);
+        SpeedClickDirector.instance.ShowScreen(TargetScreen, true);
 		yield return null;
 	}
 	

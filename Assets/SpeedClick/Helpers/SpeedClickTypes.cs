@@ -6,7 +6,8 @@ public enum ConnectionType {
 	LocalConn
 }
 
-public enum Screens {
+public enum Screens
+{
 	MainScreen,
 	ScenesScreen,
 	GameScreen,

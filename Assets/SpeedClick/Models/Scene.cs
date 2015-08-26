@@ -88,4 +88,10 @@ public class Scene: BaseObject, ISpritable
         return this.UseCustomTargetImages ? this.TargetImages.Count == this.TargetImageCount : this.SourceImagesLoaded();
     }
 
+
+    public IEnumerable<Score> GetScores()
+    {
+        List<Score> scores = BaseRepository.getAll<Score>().ToList();
+        return scores.Where(s => s.SceneId == this.ID);
+    }
 }

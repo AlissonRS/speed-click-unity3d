@@ -7,6 +7,7 @@ using Assets.SpeedClick.Core;
 public class DataLoader : MonoBehaviour {
 
     public ServerManager server;
+    public ScenesContainer scenesContainer;
 
 	// Use this for initialization
 	void Start ()
@@ -18,7 +19,7 @@ public class DataLoader : MonoBehaviour {
     {
         yield return StartCoroutine(BaseRepository.getAllFresh<Scene>());
         foreach (Scene scene in BaseRepository.getAll<Scene>())
-            ScenesContainer.instance.AddScene(scene);
+            scenesContainer.AddScene(scene);
     }
 
 }

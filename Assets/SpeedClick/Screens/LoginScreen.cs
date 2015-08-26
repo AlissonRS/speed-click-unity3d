@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LoginScreen : SpeedImagerScreen {
+public class LoginScreen : SpeedClickScreen {
 	
 
 }

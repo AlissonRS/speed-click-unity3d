@@ -6,7 +6,7 @@ using System;
 using UnityEngine.EventSystems;
 using Assets.SpeedClick.Core;
 
-public class ScenesScreen : SpeedImagerScreen {
+public class ScenesScreen : SpeedClickScreen {
 
 	public override void LoadScreen ()
 	{

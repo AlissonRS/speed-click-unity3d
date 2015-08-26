@@ -101,6 +101,18 @@ namespace Alisson.Core
             else
                 MessageDialogManager.ShowDialog(response.Message);
         }
+
+        public IEnumerator LoadScores(Scene scene)
+        {
+            string url = String.Format("scene/{0}/scores/top/{1}", scene.ID, 10);
+            yield return StartCoroutine(getConn(ConnectionType.ServerConn).SendRequest(url, HttpMethodType.Get, null));
+
+            ResponseData response = getConn(ConnectionType.ServerConn).response;
+            if (!response.Success || response.DataType != JSONValueType.Array)
+                yield break;
+            foreach (JSONValue value in response.DataArray)
+               BaseRepository.add<Score>(value);
+        }
     }
 
 }

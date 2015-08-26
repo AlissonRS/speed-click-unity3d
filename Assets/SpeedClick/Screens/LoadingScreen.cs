@@ -4,7 +4,7 @@ using Alisson.Core;
 using ProgressBar;
 using System;
 
-public class LoadingScreen : SpeedImagerScreen
+public class LoadingScreen : SpeedClickScreen
 {
 
     public Scene scene;
@@ -14,7 +14,10 @@ public class LoadingScreen : SpeedImagerScreen
     
 	public override void LoadScreen()
     {
+        int speed = progress.ProgressSpeed;
+        progress.ProgressSpeed = 1000;
         progress.Value = 0;
+        progress.ProgressSpeed = speed;
         StartCoroutine(LoadImagesFromServer(scene));
     }
 
@@ -40,7 +43,7 @@ public class LoadingScreen : SpeedImagerScreen
             progress.Value = 100;
         }
         gameScreen.scene = this.scene;
-        SpeedImagerDirector.ShowScreen(gameScreen, true);
+        SpeedClickDirector.instance.ShowScreen(gameScreen, true);
     }
 
 }

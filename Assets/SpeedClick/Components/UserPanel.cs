@@ -16,7 +16,7 @@ public class UserPanel : MonoBehaviour, IObserver<User> {
     public Text Ranking;
     public Text Score;
     public User Player;
-    public static float Alpha { get { return canvas.alpha; } set { canvas.alpha = value; } }
+    private static float Alpha { get { return canvas.alpha; } set { canvas.alpha = value; } }
 
 	// Use this for initialization
 	void Start () {
@@ -32,6 +32,17 @@ public class UserPanel : MonoBehaviour, IObserver<User> {
         instance.Player = BaseRepository.getById<User>(ServerManager.LoggedUserID);
         instance.Player.Subscribe(instance);
         instance.UpdateObserver(instance.Player);
+    }
+
+    public static void Hide()
+    {
+        canvas.alpha = 0;
+    }
+
+    public static void Show()
+    {
+        if (instance.Player != null)
+            canvas.alpha = 1;
     }
 
 

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using Alisson.Core;
 
-public class MainScreen : SpeedImagerScreen
+public class MainScreen : SpeedClickScreen
 {
 
 	public Button btnLogin;

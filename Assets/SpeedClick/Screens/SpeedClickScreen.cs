@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpeedImagerScreen : MonoBehaviour {
+public class SpeedClickScreen : MonoBehaviour {
 
-	public Screens ScreenIndex;
+    public Screens ScreenIndex;
+    public Screens PreviousScreenIndex;
+
 
 	public bool Interactable
 	{
@@ -24,7 +26,7 @@ public class SpeedImagerScreen : MonoBehaviour {
 
 	public bool IsCurrentScreen()
 	{
-		return SpeedImagerDirector.GetCurrentScreen().ScreenIndex == this.ScreenIndex;
+        return SpeedClickDirector.instance.GetCurrentScreen().ScreenIndex == this.ScreenIndex;
 	}
 
 	public virtual void LoadScreen() {}
@@ -34,5 +36,12 @@ public class SpeedImagerScreen : MonoBehaviour {
 		gameObject.GetComponent<CanvasGroup>().interactable = value;
 		gameObject.GetComponent<CanvasGroup>().blocksRaycasts = value;
 	}
+
+    public virtual void OnEscape()
+    {
+        if (this.IsCurrentScreen())
+            return;
+        SpeedClickDirector.instance.ShowScreen(this);
+    }
 
 }

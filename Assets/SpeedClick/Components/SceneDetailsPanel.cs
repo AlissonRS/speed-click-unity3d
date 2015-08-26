@@ -11,5 +11,16 @@ public class SceneDetailsPanel : MonoBehaviour
 	public Text Instructions;
 	public RankingPanel Ranking;
 
+    public float alpha { get { return this._canvas.alpha; } set { this._canvas.alpha = value; } }
+
+    private CanvasGroup _canvas;
+
+    void Start()
+    {
+        if (this._canvas == null)
+            this._canvas = this.GetComponent<CanvasGroup>();
+        this.alpha = 0;
+    }
+
 }
 

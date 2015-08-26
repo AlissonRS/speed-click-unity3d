@@ -17,20 +17,18 @@ public class LoginCommand : Command
 	public ServerManager server;
 
     public UserAvatarLoader loader;
-
 	
-	public override IEnumerator Execute(SIComponent component)
+	public override IEnumerator ExecuteAsCoroutine()
 	{
-		Button btn = (Button) component.gameObject.GetComponent(typeof(Button));
+		Button btn = (Button) this.gameObject.GetComponent(typeof(Button));
 		btn.interactable = false;
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Get));
 		if (ServerManager.LoggedUserID > 0)
         {
             User user = BaseRepository.getAll<User>().Where(u => u.ID == ServerManager.LoggedUserID).First();
-            yield return StartCoroutine(loader.Load(user));
             UserPanel.Login();
-            UserPanel.Alpha = 1;
-			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
+            UserPanel.Show();
+            SpeedClickDirector.instance.ShowScreenByType(Screens.MainScreen);
         }
 		btn.interactable = true;
 	}

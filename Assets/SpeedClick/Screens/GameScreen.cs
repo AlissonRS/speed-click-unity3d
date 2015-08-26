@@ -7,8 +7,10 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Assets.SpeedClick.Core;
 
-public class GameScreen : SpeedImagerScreen {
-    
+public class GameScreen : SpeedClickScreen {
+
+    public GameStatusDirector Director;
+
 	public Scene scene;
 
 	private int Combo = 0;
@@ -40,7 +42,6 @@ public class GameScreen : SpeedImagerScreen {
 	public SourceImagesPanel SourceImagesPanelObject;
 	
 	public bool DoCountDown = true;
-    private bool _areImagesLoaded = false;
     public bool IsLoaded = false;
 	public bool IsPaused { get; set; }
 
@@ -64,7 +65,7 @@ public class GameScreen : SpeedImagerScreen {
 
 	public override void LoadScreen()
 	{
-        UserPanel.Alpha = 0;
+        UserPanel.Hide();
 		if(this.IsPaused)
             return;
 		this.Interactable = false;
@@ -155,11 +156,11 @@ public class GameScreen : SpeedImagerScreen {
         score.TurnCount = this.TurnCount - 1; // The last one does not count ;)
         score.Accuracy = this.Accuracy;
         score.Speed = this.Speed;
-        ScoreScreen scr = (ScoreScreen) SpeedImagerDirector.GetScreen(Screens.ScoreScreen);
+        ScoreScreen scr = (ScoreScreen)SpeedClickDirector.instance.GetScreen(Screens.ScoreScreen);
         scr.score = score;
         scr.scene = this.scene;
-        UserPanel.Alpha = 1;
-        SpeedImagerDirector.ShowScreen(scr, true);
+        UserPanel.Show();
+        SpeedClickDirector.instance.ShowScreen(scr, true);
     }
 
 	void OnGUI () {
@@ -172,5 +173,10 @@ public class GameScreen : SpeedImagerScreen {
 			GameJoystick.SimulateEvent(KeyboardShortcutConfig.GetGameJoystickButton(Event.current.keyCode));
 		}
 	}
+
+    public override void OnEscape()
+    {
+        Director.Pause(30);
+    }
 
 }

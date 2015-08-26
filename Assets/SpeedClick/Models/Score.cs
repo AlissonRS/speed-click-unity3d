@@ -9,16 +9,16 @@ using UnityEngine;
 
 public class Score : BaseObject
 {
-    public float Accuracy { get; set; }
-    public int MaxCombo { get; set; }
-    public int MissCount { get; set; }
-    public Platforms Platform { get; set; }
-    public int PlayerId { get; set; }
-    public int Points { get; set; }
-    public int Ranking { get; set; }
-    public int SceneId { get; set; }
-    public float Speed { get; set; }
-    public int TurnCount { get; set; }
+    public float Accuracy;
+    public int MaxCombo;
+    public int MissCount;
+    public Platforms Platform;
+    public int PlayerId;
+    public int Points;
+    public int Ranking;
+    public int SceneId;
+    public float Speed;
+    public int TurnCount;
 
     public override void ParseObjectField(JSONObject json)
     {
@@ -26,4 +26,9 @@ public class Score : BaseObject
             this.PlayerId = BaseRepository.add<User>(json.GetValue("Player")).ID;
     }
 
+
+    public User GetUser()
+    {
+        return BaseRepository.getById<User>(this.PlayerId);
+    }
 }

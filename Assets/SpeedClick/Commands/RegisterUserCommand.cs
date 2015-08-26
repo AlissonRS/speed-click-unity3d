@@ -13,9 +13,9 @@ public class RegisterUserCommand : Command {
 	
 	public ServerManager server;
 	
-	public override IEnumerator Execute(SIComponent component)
+	public override IEnumerator ExecuteAsCoroutine()
 	{
-		Button btn = (Button) component.gameObject.GetComponent(typeof(Button));
+		Button btn = (Button) this.gameObject.GetComponent(typeof(Button));
 		btn.interactable = false;
 		if (Login.text.Length < 3 || Login.text.Length > 30 )
 		{
@@ -35,7 +35,7 @@ public class RegisterUserCommand : Command {
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Post));
 
 		if (ServerManager.LoggedUserID > 0)
-			SpeedImagerDirector.ShowScreen(Screens.MainScreen);
+            SpeedClickDirector.instance.ShowScreenByType(Screens.MainScreen);
 		btn.interactable = true;
 	}
 

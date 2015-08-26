@@ -4,46 +4,48 @@ using UnityEngine.UI;
 using System.Linq;
 using Assets.SpeedClick.Core;
 using System.Collections.Generic;
+using Alisson.Core;
 
 public class RankingPanel : MonoBehaviour
 {
-	
+
+    public ServerManager server;
 	public VerticalLayoutGroup RankingList;
+
+    void Start()
+    {
+        this.Clear();
+    }
 
 	public IEnumerator SetScene(Scene scene)
 	{
-		foreach (Transform child in RankingList.transform)
-			GameObject.Destroy(child.gameObject);
+        this.Clear();
 
-        IEnumerable<SceneRankingItem> items = BaseRepository.getAll<SceneRankingItem>();
+        IEnumerable<Score> items = scene.GetScores();
         if (items.Count() == 0 || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {
-            yield return StartCoroutine(BaseRepository.getAllFresh<SceneRankingItem>());
-            items = BaseRepository.getAll<SceneRankingItem>();
+            yield return StartCoroutine(server.LoadScores(scene));
+            items = scene.GetScores();
         }
-        foreach (SceneRankingItem ranking in items.OrderByDescending(r => r.Score))
+        List<Score> scores = items.ToList();
+        foreach (Score score in scores.OrderByDescending(r => r.Points))
 		{
 			GameObject obj = (GameObject) Instantiate(Resources.Load("Prefabs/RankingItem"));
 			RankingItem item = obj.GetComponent<RankingItem>();
-			User user = ranking.GetUser();
+            User user = score.GetUser();
 			item.Avatar.sprite = user.GetAvatar();
 			item.Nick.text = user.Login;
-			item.Score.text = string.Format("Pts. {0} - ({0}x)", ranking.Score, ranking.MaxCombo);
+            item.Score.text = string.Format("Pts. {0} - ({1}x)", score.Points, score.MaxCombo);
 			item.transform.SetParent(RankingList.transform, false);
 		}
 
 	}
 
-	// Use this for initialization
-	void Start ()
-	{
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
-	}
+    public void Clear()
+    {
+        foreach (Transform child in RankingList.transform)
+            GameObject.Destroy(child.gameObject);
+    }
+
 }
 

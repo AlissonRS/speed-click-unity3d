@@ -10,7 +10,15 @@ using UnityEngine;
 public class UserAvatarLoader: MonoBehaviour
 {
 
+    public static UserAvatarLoader instance;
+
     public ServerManager server;
+
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     public IEnumerator Load(User user)
     {

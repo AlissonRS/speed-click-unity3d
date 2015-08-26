@@ -5,7 +5,7 @@ using System;
 using Assets.SpeedClick.Core;
 using Alisson.Core;
 
-public class ScoreScreen : SpeedImagerScreen {
+public class ScoreScreen : SpeedClickScreen {
 
     public ServerManager server;
 

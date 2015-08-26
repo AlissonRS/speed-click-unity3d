@@ -12,9 +12,9 @@ public class LoadSceneCommand : Command
 	public RankingPanel Ranking;
 	public static Scene scene;
 
-	public override IEnumerator Execute(SIComponent component)
+	public override IEnumerator ExecuteAsCoroutine()
 	{
-		Scene sc = component.GetData<Scene>("scene");
+		Scene sc = this.GetData<Scene>("scene");
 		if (scene == null || sc.ID != scene.ID)
 		{
 			scene = sc;
@@ -28,6 +28,8 @@ public class LoadSceneCommand : Command
 	public IEnumerator ShowSceneDetails()
 	{
         User user = scene.Creator;
+        if (ScenePanel.alpha != 1)
+            ScenePanel.alpha = 1;
 		this.ScenePanel.Title.text = scene.Title;
 		this.ScenePanel.Properties.text = scene.GetProperties();
 		this.ScenePanel.Author.text = "Criada por " + user.Login;
@@ -39,15 +41,15 @@ public class LoadSceneCommand : Command
 	{
         if (scene.SourceImages.Count == 0) // If there are no images loaded, send user to Loading page while images are downloaded...
         {
-            LoadingScreen scr = (LoadingScreen)SpeedImagerDirector.GetScreen(Screens.LoadingScreen);
+            LoadingScreen scr = (LoadingScreen)SpeedClickDirector.instance.GetScreen(Screens.LoadingScreen);
             scr.scene = scene;
-            SpeedImagerDirector.ShowScreen(scr, true);
+            SpeedClickDirector.instance.ShowScreen(scr, true);
         }
         else // Otherwise, send directly to game screen...
         {
-            GameScreen scr = (GameScreen)SpeedImagerDirector.GetScreen(Screens.GameScreen);
+            GameScreen scr = (GameScreen)SpeedClickDirector.instance.GetScreen(Screens.GameScreen);
             scr.scene = scene;
-            SpeedImagerDirector.ShowScreen(scr, true);
+            SpeedClickDirector.instance.ShowScreen(scr, true);
         }
 	}
 

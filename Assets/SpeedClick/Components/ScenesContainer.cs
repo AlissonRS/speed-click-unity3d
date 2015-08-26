@@ -13,14 +13,14 @@ public class ScenesContainer : MonoBehaviour {
     public Text BackgroundText;
     public List<Scene> scenes = new List<Scene>();
 
-	// Use this for initialization
-	void Start () {
+    public void Awake()
+    {
         if (instance == null)
             instance = this;
         container = instance.GetComponent<LayoutGroup>();
         foreach (Transform child in container.transform)
             GameObject.Destroy(child.gameObject);
-	}
+    }
 
 	public void AddScene(Scene scene)
     {
@@ -33,7 +33,7 @@ public class ScenesContainer : MonoBehaviour {
         LoadSceneCommand load = sceneButton.GetComponent<LoadSceneCommand>();
         load.ScenePanel = this.ScenePanel;
         load.Ranking = this.Ranking;
-        sceneButton.GetComponent<SIComponent>().SetData<Scene>("scene", scene);
+        load.SetData<Scene>("scene", scene);
     }
 
 }

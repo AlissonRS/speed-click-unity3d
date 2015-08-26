@@ -41,6 +41,12 @@ public class User : BaseObject, ISubject<User>, ISpritable
         }
     } // Avatar used by users who don't have an avatar...
     
+    public void Start()
+    {
+        if (UserAvatarLoader.instance != null)
+            StartCoroutine(UserAvatarLoader.instance.Load(this));
+    }
+
 	public Sprite GetAvatar()
 	{
 		if (this.Avatar == null)
