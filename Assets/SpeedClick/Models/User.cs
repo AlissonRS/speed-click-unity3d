@@ -14,16 +14,13 @@ public class User : BaseObject, ISubject<User>, ISpritable
     public int Ranking;
     public int Score;
     public Sprite Avatar;
-    public bool HasOwnAvatar = false;
+    public string AvatarUrl;
 
     private IList<IObserver<User>> _observers;
 
     public IList<IObserver<User>> Observers
     {
-        get
-        {
-            return _observers ?? (_observers = new List<IObserver<User>>());
-        }
+        get  { return _observers ?? (_observers = new List<IObserver<User>>()); }
     }
 
     private static Sprite _unknownAvatar;
@@ -40,17 +37,15 @@ public class User : BaseObject, ISubject<User>, ISpritable
             return _unknownAvatar;
         }
     } // Avatar used by users who don't have an avatar...
-    
-    public void Start()
-    {
-        if (UserAvatarLoader.instance != null)
-            StartCoroutine(UserAvatarLoader.instance.Load(this));
-    }
 
 	public Sprite GetAvatar()
 	{
 		if (this.Avatar == null)
+        {
             this.Avatar = UnknownAvatar;
+            if (UserAvatarLoader.instance != null)
+                UserAvatarLoader.instance.Load(this);
+        }
         return this.Avatar;
 	}
 
@@ -58,7 +53,7 @@ public class User : BaseObject, ISubject<User>, ISpritable
     {
         foreach (var vo in Observers)
         {
-            vo.UpdateObserver(this);
+            vo.ReceiveSubjectNotification(this);
         }
     }
 
@@ -81,10 +76,13 @@ public class User : BaseObject, ISubject<User>, ISpritable
     {
         this.Avatar = sprite;
         if (this.Avatar != null)
-        {
-            this.HasOwnAvatar = true;
             this.Notify();
-        }
+    }
+
+
+    public string GetImageUrl()
+    {
+        return this.AvatarUrl;
     }
 }
 

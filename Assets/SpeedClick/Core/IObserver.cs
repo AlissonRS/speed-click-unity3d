@@ -5,9 +5,9 @@ namespace Alisson.Core
 
     public interface IObserver<T> where T : class 
     {
-        void UpdateObserver(T sub);
+        void ReceiveSubjectNotification(T sub);
 
-        T Element { get; set; }
+        //T Element { get; set; }
     }
 
 }

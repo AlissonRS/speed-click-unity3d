@@ -9,5 +9,7 @@ namespace Assets.SpeedClick.Core
     public interface ISpritable
     {
         void LoadSprite(Sprite sprite);
+
+        string GetImageUrl();
     }
 }

@@ -94,4 +94,14 @@ public class Scene: BaseObject, ISpritable
         List<Score> scores = BaseRepository.getAll<Score>().ToList();
         return scores.Where(s => s.SceneId == this.ID);
     }
+
+    // Will always get the next pending image url
+    public string GetImageUrl()
+    {
+        if (this.SourceImageCount > this.SourceImages.Count) // If we don't have all the source images yet
+            return String.Format("scenes/source/{0}/{1}.png", this.ID.ToString("D8"), this.SourceImages.Count + 1);
+        if (this.TargetImageCount > this.TargetImages.Count) // If we don't have all the source images yet
+            return String.Format("scenes/target/{0}/{1}.png", this.ID.ToString("D8"), this.TargetImages.Count + 1);
+        return "";
+    }
 }

@@ -20,17 +20,16 @@ public class UserAvatarLoader: MonoBehaviour
             instance = this;
     }
 
-    public IEnumerator Load(User user)
+    public void Load(User user)
     {
-        string url = String.Format("users/{0}.png", user.ID.ToString("D8"));
-        yield return StartCoroutine(server.LoadImageIntoSprite(user, url));
+        StartCoroutine(server.LoadImageIntoSprite(user));
     }
 
-    public IEnumerator LoadAll()
+    public void LoadAll()
     {
-        IEnumerable<User> users = BaseRepository.getAll<User>().Where(u => !u.HasOwnAvatar);
+        IEnumerable<User> users = BaseRepository.getAll<User>().Where(u => u.AvatarUrl != "");
         foreach (User user in users)
-            yield return StartCoroutine(Load(user));
+            Load(user);
     }
 
 }

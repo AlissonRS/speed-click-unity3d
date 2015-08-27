@@ -10,6 +10,7 @@ public class ScenesScreen : SpeedClickScreen {
 
 	public override void LoadScreen ()
 	{
+        LoadSceneCommand.Clear();
         //IEnumerable<Scene> scenesList = BaseRepository.getAll<Scene>();
         //foreach (Scene scene in scenesList)
         //{z

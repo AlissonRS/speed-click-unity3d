@@ -44,8 +44,11 @@ namespace Alisson.Core
 			return getConn(ConnectionType);
 		}
 
-        public IEnumerator LoadImageIntoSprite(ISpritable spritable, string url)
+        public IEnumerator LoadImageIntoSprite(ISpritable spritable)
         {
+            string url = spritable.GetImageUrl();
+            if (url == "")
+                yield break;
             yield return StartCoroutine(getConn(ConnectionType.ServerConn).LoadImageIntoTexture(url));
             ResponseData response = getConn(ConnectionType.ServerConn).response;
 			if (response.Success)

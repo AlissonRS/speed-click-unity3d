@@ -20,6 +20,7 @@ namespace Alisson.Core.Database.Connections
             Texture2D texture = new Texture2D(4, 4, TextureFormat.DXT5, false);
             WWW www = new WWW(url);
             yield return www;
+
             www.LoadImageIntoTexture(texture);
 
             this.response = new ResponseData();

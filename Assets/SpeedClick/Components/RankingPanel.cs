@@ -33,6 +33,7 @@ public class RankingPanel : MonoBehaviour
 			GameObject obj = (GameObject) Instantiate(Resources.Load("Prefabs/RankingItem"));
 			RankingItem item = obj.GetComponent<RankingItem>();
             User user = score.GetUser();
+            user.Subscribe(item); // If the user changes his/her avatar, the ranking item will be updated...
 			item.Avatar.sprite = user.GetAvatar();
 			item.Nick.text = user.Login;
             item.Score.text = string.Format("Pts. {0} - ({1}x)", score.Points, score.MaxCombo);

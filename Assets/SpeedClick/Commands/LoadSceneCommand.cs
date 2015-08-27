@@ -7,10 +7,24 @@ using System;
 
 public class LoadSceneCommand : Command
 {
+
+    public static LoadSceneCommand instance;
 	
 	public SceneDetailsPanel ScenePanel;
 	public RankingPanel Ranking;
-	public static Scene scene;
+	public Scene scene;
+
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    public static void Clear()
+    {
+        instance.scene = null;
+        instance.Ranking.Clear();
+    }
 
 	public override IEnumerator ExecuteAsCoroutine()
 	{
@@ -87,7 +101,6 @@ public class LoadSceneCommand : Command
     //			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
     //		}
     //	}
-
 
 }
 

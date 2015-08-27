@@ -35,7 +35,11 @@ public class RegisterUserCommand : Command {
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Post));
 
 		if (ServerManager.LoggedUserID > 0)
+        {
+            UserPanel.Login();
+            UserPanel.Show();
             SpeedClickDirector.instance.ShowScreenByType(Screens.MainScreen);
+        }
 		btn.interactable = true;
 	}
 

@@ -36,7 +36,6 @@ public class ScoreScreen : SpeedClickScreen {
             StartCoroutine(this.SendScore());
             User player = BaseRepository.getById<User>(this.score.PlayerId);
             this.PlayedBy.text = "Jogado por " + player.Login;
-            this.Ranking.text = "Submetendo pontuação...";
         }
 
         this.Accuracy.text = String.Format(Constants.ACCURACY_FORMAT, this.score.Accuracy);
@@ -50,13 +49,19 @@ public class ScoreScreen : SpeedClickScreen {
     public IEnumerator SendScore()
     {
         this.score.Platform = SpeedClickHelpers.ConvertPlatformType(Application.platform);
+        this.Ranking.text = "Submetendo pontuação...";
         yield return StartCoroutine(server.SendScore(this.score));
+        this.PreencheRanking();
     }
 
-    void Update()
+    private void PreencheRanking()
     {
-        if (score.Ranking > 0)
-            this.Ranking.text = String.Format("{0}", this.score.Ranking);
+        if (score.Ranking == 1)
+            this.Ranking.text = "#1 - Incrível! Você é atualmente o melhor neste cenário...";
+        else if (score.Ranking > 0)
+            this.Ranking.text = String.Format("#{0} - Novo Recorde Pessoal!", this.score.Ranking);
+        else
+            this.Ranking.text = String.Format("Você não bateu seu recorde pessoal!", this.score.Ranking);
     }
 
 }

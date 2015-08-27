@@ -25,7 +25,6 @@ public class LoginCommand : Command
 		yield return StartCoroutine(server.Login(Login.text, Password.text, HttpMethodType.Get));
 		if (ServerManager.LoggedUserID > 0)
         {
-            User user = BaseRepository.getAll<User>().Where(u => u.ID == ServerManager.LoggedUserID).First();
             UserPanel.Login();
             UserPanel.Show();
             SpeedClickDirector.instance.ShowScreenByType(Screens.MainScreen);
