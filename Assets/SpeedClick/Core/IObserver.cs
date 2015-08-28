@@ -7,7 +7,7 @@ namespace Alisson.Core
     {
         void ReceiveSubjectNotification(T sub);
 
-        //T Element { get; set; }
+        T Element { get; set; }
     }
 
 }

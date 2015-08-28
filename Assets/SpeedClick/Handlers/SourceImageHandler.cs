@@ -11,7 +11,7 @@ public class SourceImageHandler : MonoBehaviour, IPointerClickHandler, IPointerE
 
 	public void OnPointerClick (PointerEventData eventData)
 	{
-		SpeedClickHelpers.GetInstance<GameScreen>().Hit(this);
+        GameScreen.instance.Hit(this);
 	}
 	
 	public void OnPointerEnter (PointerEventData eventData)

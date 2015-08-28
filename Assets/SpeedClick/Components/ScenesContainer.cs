@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Assets.SpeedClick.Components;
 
 public class ScenesContainer : MonoBehaviour {
 
@@ -30,10 +31,8 @@ public class ScenesContainer : MonoBehaviour {
         Text text = (Text)sceneButton.GetComponentInChildren(typeof(Text));
         text.text = scene.Title;
         sceneButton.transform.SetParent(container.transform, false);
-        LoadSceneCommand load = sceneButton.GetComponent<LoadSceneCommand>();
-        load.ScenePanel = this.ScenePanel;
-        load.Ranking = this.Ranking;
-        load.SetData<Scene>("scene", scene);
+        SceneButtonHandler h = sceneButton.GetComponent<SceneButtonHandler>();
+        h.SceneId = scene.ID;
     }
 
 }

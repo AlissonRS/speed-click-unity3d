@@ -6,8 +6,11 @@ using System;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Assets.SpeedClick.Core;
+using System.Linq;
 
 public class GameScreen : SpeedClickScreen {
+
+    public static GameScreen instance;
 
     public GameStatusDirector Director;
 
@@ -45,6 +48,12 @@ public class GameScreen : SpeedClickScreen {
     public bool IsLoaded = false;
 	public bool IsPaused { get; set; }
 
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
 	public void Hit(SourceImageHandler src)
 	{
 		if (src.Index == this.CurrentTargetIndex)
@@ -68,9 +77,9 @@ public class GameScreen : SpeedClickScreen {
         UserPanel.Hide();
 		if(this.IsPaused)
             return;
-		this.Interactable = false;
+        this.Interactable = false;
+        this.IsLoaded = false;
 		this.DoCountDown = true;
-		this.Interactable = true;
         this.Accuracy = 0;
 		this.Combo = 0;
         this.CurrentTargetIndex = -1;
@@ -87,10 +96,8 @@ public class GameScreen : SpeedClickScreen {
 
         this.SourceImagesPanelObject.LoadImages(this.scene.SourceImages);
 
-        this.Interactable = true;
         this.LoadTarget();
         this.IsLoaded = true;
-
 	}
 
 	void LoadTarget()
@@ -111,11 +118,13 @@ public class GameScreen : SpeedClickScreen {
 
 	void Update()
 	{
-        if (!this.IsLoaded || IsPaused) return;
+        if (!IsLoaded || IsPaused) return;
 		if (this.DoCountDown)
 		{
 			this.HealthBar.value += (this.HealthBar.maxValue / 1.5f * Time.deltaTime); // 1.5 secs to fill progress bar
 			this.DoCountDown = this.HealthBar.value < this.HealthBar.maxValue;
+            if (!this.DoCountDown)
+                this.Interactable = true;
 			return;
         }
 
@@ -143,11 +152,15 @@ public class GameScreen : SpeedClickScreen {
 
     private void FinishScene()
     {
-        Score score = BaseRepository.add<Score>();
-        if (UserPanel.instance.Player != null)
-            score.PlayerId = UserPanel.instance.Player.ID;
+        int PlayerId;
+        if (UserPanel.instance.Element != null)
+            PlayerId = UserPanel.instance.Element.ID;
         else
-            score.PlayerId = 0;
+            PlayerId = 0;
+        Score score = BaseRepository.getAll<Score>().FirstOrDefault(s => s.PlayerId == PlayerId && s.SceneId == this.scene.ID);
+        if (score == null)
+            score = BaseRepository.add<Score>();
+        score.PlayerId = PlayerId;
         score.Points = this.Points;
         score.SceneId = this.scene.ID;
         score.MaxCombo = this.MaxCombo;
@@ -164,7 +177,7 @@ public class GameScreen : SpeedClickScreen {
     }
 
 	void OnGUI () {
-		if (!this.IsCurrentScreen() || IsPaused) return;
+		if (IsPaused || !IsLoaded || !this.IsCurrentScreen()) return;
 		if (Event.current.type == EventType.KeyUp)
 			this.IsKeyPressed = false;
 		if (!this.IsKeyPressed && Event.current.type == EventType.KeyDown)

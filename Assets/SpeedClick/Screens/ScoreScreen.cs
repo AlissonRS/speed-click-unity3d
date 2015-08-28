@@ -9,7 +9,7 @@ public class ScoreScreen : SpeedClickScreen {
 
     public ServerManager server;
 
-    public Score score;
+    public Score score { get; set; }
     public Scene scene;
 
     public Text Accuracy;
@@ -26,6 +26,13 @@ public class ScoreScreen : SpeedClickScreen {
     public override void LoadScreen()
     {
         this.SceneName.text = this.scene.Title;
+        this.Accuracy.text = String.Format(Constants.ACCURACY_FORMAT, this.score.Accuracy);
+        this.MaxCombo.text = String.Format("{0}", this.score.MaxCombo);
+        this.MissCount.text = String.Format("{0}", this.score.MissCount);
+        this.Points.text = String.Format("{0:n0}", this.score.Points);
+        this.Speed.text = String.Format(Constants.SPEED_FORMAT, this.score.Speed);
+        this.TurnCount.text = String.Format("{0}", this.score.TurnCount);
+
         if (this.score.PlayerId == 0)
         {
             this.Ranking.text = "Necessário Logar para enviar...";
@@ -38,12 +45,6 @@ public class ScoreScreen : SpeedClickScreen {
             this.PlayedBy.text = "Jogado por " + player.Login;
         }
 
-        this.Accuracy.text = String.Format(Constants.ACCURACY_FORMAT, this.score.Accuracy);
-        this.MaxCombo.text = String.Format("{0}", this.score.MaxCombo);
-        this.MissCount.text = String.Format("{0}", this.score.MissCount);
-        this.Points.text = String.Format("{0:n0}", this.score.Points);
-        this.Speed.text = String.Format(Constants.SPEED_FORMAT, this.score.Speed);
-        this.TurnCount.text = String.Format("{0}", this.score.TurnCount);
     }
 
     public IEnumerator SendScore()
@@ -57,7 +58,7 @@ public class ScoreScreen : SpeedClickScreen {
     private void PreencheRanking()
     {
         if (score.Ranking == 1)
-            this.Ranking.text = "#1 - Incrível! Você é atualmente o melhor neste cenário...";
+            this.Ranking.text = "#1 - Incrível! Você é o melhor neste cenário...";
         else if (score.Ranking > 0)
             this.Ranking.text = String.Format("#{0} - Novo Recorde Pessoal!", this.score.Ranking);
         else

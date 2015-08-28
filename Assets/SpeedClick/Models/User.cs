@@ -59,17 +59,14 @@ public class User : BaseObject, ISubject<User>, ISpritable
 
     public void Subscribe(IObserver<User> observer)
     {
+        observer.Element = this;
         Observers.Add(observer);
     }
 
     public void Unsubscribe(IObserver<User> observer)
     {
+        observer.Element = null;
         Observers.Remove(observer);
-    }
-
-    public User Element
-    {
-        get { return this; }
     }
 
     public void LoadSprite(Sprite sprite)

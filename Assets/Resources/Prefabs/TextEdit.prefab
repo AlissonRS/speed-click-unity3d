@@ -11,6 +11,7 @@ GameObject:
   - 222: {fileID: 22206152}
   - 114: {fileID: 11472548}
   - 114: {fileID: 11439906}
+  - 114: {fileID: 11483828}
   m_Layer: 5
   m_Name: TextEdit
   m_TagString: Untagged
@@ -184,6 +185,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &11483828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 137258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd05c9c907187b41b03860f53de8146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTab:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: OnTabEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!222 &22206152
 CanvasRenderer:
   m_ObjectHideFlags: 1

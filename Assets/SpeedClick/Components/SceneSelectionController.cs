@@ -1,18 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using Assets.SpeedClick.Core;
-using Alisson.Core;
-using System;
 
-public class LoadSceneCommand : Command
-{
+public class SceneSelectionController : MonoBehaviour {
 
-    public static LoadSceneCommand instance;
-	
-	public SceneDetailsPanel ScenePanel;
-	public RankingPanel Ranking;
-	public Scene scene;
+    public static SceneSelectionController instance;
+
+    public SceneDetailsPanel ScenePanel;
+    public RankingPanel Ranking;
+    public int SelectedSceneID;
 
     void Awake()
     {
@@ -22,37 +17,36 @@ public class LoadSceneCommand : Command
 
     public static void Clear()
     {
-        instance.scene = null;
+        instance.SelectedSceneID = 0;
         instance.Ranking.Clear();
     }
 
-	public override IEnumerator ExecuteAsCoroutine()
-	{
-		Scene sc = this.GetData<Scene>("scene");
-		if (scene == null || sc.ID != scene.ID)
-		{
-			scene = sc;
-			yield return StartCoroutine(this.ShowSceneDetails());
-		}
-		else
-			this.OpenScene();
+    public IEnumerator LoadScene(Scene scene)
+    {
+        if (scene == null || SelectedSceneID != scene.ID)
+        {
+            SelectedSceneID = scene.ID;
+            yield return StartCoroutine(this.ShowSceneDetails(scene));
+        }
+        else
+            this.OpenScene(scene);
         yield return null;
-	}
+    }
 
-	public IEnumerator ShowSceneDetails()
-	{
+    public IEnumerator ShowSceneDetails(Scene scene)
+    {
         User user = scene.Creator;
         if (ScenePanel.alpha != 1)
             ScenePanel.alpha = 1;
-		this.ScenePanel.Title.text = scene.Title;
-		this.ScenePanel.Properties.text = scene.GetProperties();
-		this.ScenePanel.Author.text = "Criada por " + user.Login;
-		this.ScenePanel.Instructions.text = scene.Instructions;
-		yield return StartCoroutine(this.Ranking.SetScene(scene));
-	}
+        this.ScenePanel.Title.text = scene.Title;
+        this.ScenePanel.Properties.text = scene.GetProperties();
+        this.ScenePanel.Author.text = "Criada por " + user.Login;
+        this.ScenePanel.Instructions.text = scene.Instructions;
+        yield return StartCoroutine(this.Ranking.SetScene(scene));
+    }
 
-    public void OpenScene()
-	{
+    public void OpenScene(Scene scene)
+    {
         if (scene.SourceImages.Count == 0) // If there are no images loaded, send user to Loading page while images are downloaded...
         {
             LoadingScreen scr = (LoadingScreen)SpeedClickDirector.instance.GetScreen(Screens.LoadingScreen);
@@ -65,7 +59,7 @@ public class LoadSceneCommand : Command
             scr.scene = scene;
             SpeedClickDirector.instance.ShowScreen(scr, true);
         }
-	}
+    }
 
 
     private void LoadLocalSourceImages()
@@ -101,6 +95,4 @@ public class LoadSceneCommand : Command
     //			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
     //		}
     //	}
-
 }
-

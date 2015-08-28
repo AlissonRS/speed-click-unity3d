@@ -30,8 +30,8 @@ GameObject:
   - 114: {fileID: 11487600}
   - 114: {fileID: 11467928}
   - 95: {fileID: 9570218}
-  - 114: {fileID: 11451326}
   - 114: {fileID: 11431322}
+  - 114: {fileID: 11476932}
   m_Layer: 5
   m_Name: SceneButton
   m_TagString: Untagged
@@ -88,19 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21222a7879559524dbc2dd79c1cfc55f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11451326
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 172628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c4eb457cd5783f4c9994b581542568b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ScenePanel: {fileID: 0}
-  Ranking: {fileID: 0}
 --- !u!114 &11467928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,6 +132,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Fase 1
+--- !u!114 &11476932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59aef8a15b4d0984c807aa94f335d2d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SceneId: 0
 --- !u!114 &11487600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -157,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -184,7 +183,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11451326}
+      - m_Target: {fileID: 0}
         m_MethodName: Execute
         m_Mode: 1
         m_Arguments:
@@ -258,7 +257,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11451326}
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Execute
@@ -266,6 +265,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

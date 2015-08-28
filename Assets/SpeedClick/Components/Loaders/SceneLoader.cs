@@ -4,7 +4,7 @@ using Alisson.Core;
 using Alisson.Core.Database;
 using Assets.SpeedClick.Core;
 
-public class DataLoader : MonoBehaviour {
+public class SceneLoader : MonoBehaviour {
 
     public ServerManager server;
     public ScenesContainer scenesContainer;

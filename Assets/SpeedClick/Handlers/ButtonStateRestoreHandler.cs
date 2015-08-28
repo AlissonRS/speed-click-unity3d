@@ -11,6 +11,11 @@ public class ButtonStateRestoreHandler : MonoBehaviour, IPointerClickHandler
 	private Color defaultTextColor;
 	private Color defaultButtonColor;
 
+    void OnEnable()
+    {
+        this.ResetProperties();
+    }
+
 	public void OnPointerClick (PointerEventData eventData)
 	{
 		this.ResetProperties();
@@ -18,10 +23,10 @@ public class ButtonStateRestoreHandler : MonoBehaviour, IPointerClickHandler
 	
 	private void ResetProperties()
 	{
-		if (this.buttonImage != null)
-		this.buttonImage.color = defaultButtonColor;
-		if (this.buttonText != null)
-			this.buttonText.color = defaultTextColor;
+        if (this.buttonImage != null)
+            this.buttonImage.color = defaultButtonColor;
+        if (this.buttonText != null)
+            this.buttonText.color = defaultTextColor;
 	}
 
 	void Start()

@@ -10,10 +10,10 @@ public class ScenesScreen : SpeedClickScreen {
 
 	public override void LoadScreen ()
 	{
-        LoadSceneCommand.Clear();
+        SceneSelectionController.Clear();
         //IEnumerable<Scene> scenesList = BaseRepository.getAll<Scene>();
         //foreach (Scene scene in scenesList)
-        //{z
+        //{
         //    scenes.Add(scene);
         //    GameObject sceneButton = (GameObject) Instantiate(Resources.Load("Prefabs/SceneButton"));
         //    Text text = (Text) sceneButton.GetComponentInChildren(typeof(Text));

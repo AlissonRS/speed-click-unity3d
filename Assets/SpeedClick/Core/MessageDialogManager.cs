@@ -71,6 +71,8 @@ public class MessageDialogManager : MonoBehaviour, IPointerClickHandler
 
 	public static void ShowDialog(string message, bool keepAlive = false)
 	{
+        if (message.IsNullOrWhiteSpace())
+            return;
 		instance.message.text = message;
 		instance.gameObject.SetActive(true);
 		instance.show = true;

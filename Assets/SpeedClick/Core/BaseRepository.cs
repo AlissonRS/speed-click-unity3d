@@ -73,9 +73,17 @@ namespace Assets.SpeedClick.Core
             Type t = typeof(T);
             string repoName = t.Name + "Repository";
             Transform repo = instance.gameObject.transform.FindChild(repoName);
+            List<T> list = new List<T>();
             if (repo != null)
-                return repo.GetComponentsInChildren<T>();
-            return new List<T>();
+            {
+                foreach(Transform child in repo.transform)
+                {
+                    T comp = child.GetComponent<T>();
+                    if (comp != null)
+                        list.Add(comp);
+                }
+            }
+            return list;
         }
 
         public static IEnumerator getAllFresh<T>() where T : BaseObject
@@ -90,8 +98,8 @@ namespace Assets.SpeedClick.Core
         }
         public static T getById<T>(int ID) where T : BaseObject
         {
-            IEnumerable<T> objs = getAll<T>().Where<T>(u => u.ID == ID);
-            if (objs.Count() == 1)
+            List<T> objs = getAll<T>().Where<T>(u => u.ID == ID).ToList();
+            if (objs.Count() >= 1)
                 return objs.First();
             return null;
         }

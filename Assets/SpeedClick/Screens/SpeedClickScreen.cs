@@ -39,9 +39,9 @@ public class SpeedClickScreen : MonoBehaviour {
 
     public virtual void OnEscape()
     {
-        if (this.IsCurrentScreen())
+        if (this.ScreenIndex == this.PreviousScreenIndex)
             return;
-        SpeedClickDirector.instance.ShowScreen(this);
+        SpeedClickDirector.instance.ShowScreen(this.PreviousScreenIndex, true);
     }
 
 }
