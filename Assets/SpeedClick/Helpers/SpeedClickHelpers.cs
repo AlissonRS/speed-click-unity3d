@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using Boomlagoon.JSON;
+using System.Text;
 
 public static class SpeedClickHelpers
 {
@@ -66,8 +67,8 @@ public static class SpeedClickHelpers
 
     public static bool IsInternetConnectionAvailable()
     {
-        if (Network.player.ipAddress.ToString() != "127.0.0.1")
-            return true;
+        //if (Network.player.ipAddress.ToString() != "127.0.0.1")
+        //    return true;
 
         if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
             return true;
@@ -100,6 +101,45 @@ public static class SpeedClickHelpers
             case RuntimePlatform.WebGLPlayer: return Platforms.WebGLPlayer;
             default: throw new InvalidOperationException("Tipo de player não suportado!");
         }
+    }
+
+    public static string GetDomainURL()
+    {
+        switch (Application.platform)
+        {
+            case RuntimePlatform.WindowsWebPlayer:
+            case RuntimePlatform.OSXWebPlayer:
+            case RuntimePlatform.WebGLPlayer: return "http://localhost/";
+            default: return "http://52.25.19.44/";
+        }
+    }
+
+    public static string GetApiURL()
+    {
+        return String.Concat(GetDomainURL(), "speedclick/api/");
+    }
+
+    public static string GetImagesURL()
+    {
+        if (Application.isMobilePlatform)
+            return "file:///c:/inetpub/wwwroot/si/speedclick/img/";
+        else
+            return String.Concat(GetDomainURL(), "speedclick/img/");
+    }
+
+
+    public static void MakeTextureMultipleOfFour(Texture2D texture)
+    {
+        int width = texture.width;
+        int height = texture.height;
+        while (width % 4 != 0)
+            width--;
+        while (height % 4 != 0)
+            height--;
+        if (width == texture.width && height == texture.height)
+            return;
+        texture.Resize(width, height, TextureFormat.DXT5, false);
+        texture.Apply(true);
     }
 
 }

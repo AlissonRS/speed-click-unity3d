@@ -16,8 +16,8 @@ namespace Alisson.Core.Database.Connections
 
         public override IEnumerator LoadImageIntoTexture(string file)
         {
-            string url = Constants.SERVER_IMAGES_URL + file;
-            Texture2D texture = new Texture2D(4, 4, TextureFormat.DXT5, false);
+            string url = String.Concat(SpeedClickHelpers.GetImagesURL(), file);
+            Texture2D texture = new Texture2D(1, 1, TextureFormat.DXT5Crunched, false);
             WWW www = new WWW(url);
             yield return www;
 
@@ -33,6 +33,7 @@ namespace Alisson.Core.Database.Connections
                 yield break;
             else
             {
+                //SpeedClickHelpers.MakeTextureMultipleOfFour(texture);
                 this.response.DownloadedSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 this.response.Message = "";
                 this.response.Success = true;
@@ -42,7 +43,7 @@ namespace Alisson.Core.Database.Connections
 
 		public override IEnumerator SendRequest(string controller, HttpMethodType t, Dictionary<string, object> p)
 		{
-            string url = Constants.SERVER_API_URL + controller;
+            string url = String.Concat(SpeedClickHelpers.GetApiURL(), controller);
             WWW www = null;
 			if (p != null)
 			{

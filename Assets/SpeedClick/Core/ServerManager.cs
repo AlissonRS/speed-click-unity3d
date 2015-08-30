@@ -44,15 +44,14 @@ namespace Alisson.Core
 			return getConn(ConnectionType);
 		}
 
-        public IEnumerator LoadImageIntoSprite(ISpritable spritable)
+        public IEnumerator LoadImageIntoSprite(string url, Action<Sprite> callback = null)
         {
-            string url = spritable.GetImageUrl();
             if (url == "")
                 yield break;
             yield return StartCoroutine(getConn(ConnectionType.ServerConn).LoadImageIntoTexture(url));
             ResponseData response = getConn(ConnectionType.ServerConn).response;
-			if (response.Success)
-                spritable.LoadSprite(response.DownloadedSprite);
+            if (response.Success && callback != null)
+                callback(response.DownloadedSprite);
         }
 
 		public IEnumerator Login(string login, string password, HttpMethodType type)

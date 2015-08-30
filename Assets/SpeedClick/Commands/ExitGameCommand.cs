@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 public class ExitGameCommand : Command {
 
@@ -8,7 +7,7 @@ public class ExitGameCommand : Command {
 
 	public override IEnumerator ExecuteAsCoroutine()
 	{
-		if (!GetUserConfirmation || Application.isMobilePlatform || EditorUtility.DisplayDialog("Sair", "Deseja realmente sair do aplicativo?", "Sim", "Nao"))
+		if (!GetUserConfirmation || Application.isMobilePlatform)
 			Application.Quit();
 		yield return null;
 	}

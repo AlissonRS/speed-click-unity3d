@@ -7,7 +7,7 @@ using Boomlagoon.JSON;
 using System;
 using Assets.SpeedClick.Core;
 
-public class User : BaseObject, ISubject<User>, ISpritable
+public class User : BaseObject, ISubject<User>//, ISpritable
 {
 
     public string Login;
@@ -52,9 +52,7 @@ public class User : BaseObject, ISubject<User>, ISpritable
     public void Notify()
     {
         foreach (var vo in Observers)
-        {
             vo.ReceiveSubjectNotification(this);
-        }
     }
 
     public void Subscribe(IObserver<User> observer)
@@ -76,10 +74,5 @@ public class User : BaseObject, ISubject<User>, ISpritable
             this.Notify();
     }
 
-
-    public string GetImageUrl()
-    {
-        return this.AvatarUrl;
-    }
 }
 

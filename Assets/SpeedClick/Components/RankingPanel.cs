@@ -40,6 +40,8 @@ public class RankingPanel : MonoBehaviour
                 user.Subscribe(item); // If the user changes his/her avatar, the ranking item will be updated...
                 item.Avatar.sprite = user.GetAvatar();
                 item.Nick.text = user.Login;
+                item.score = score;
+                item.scene = scene;
                 item.Score.text = String.Format("Pts. {0} - ({1}x)", score.Points, score.MaxCombo);
                 item.FullCombo.text = score.MissCount == 0 ? "Full Combo" : "";
                 item.transform.SetParent(RankingList.transform, false);

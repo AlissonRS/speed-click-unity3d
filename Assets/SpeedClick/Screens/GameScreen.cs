@@ -18,12 +18,13 @@ public class GameScreen : SpeedClickScreen {
 
 	private int Combo = 0;
 	private int Points = 0;
+    private float _leftSceneSecs;
 	private float LeftTurnSecs
 	{
 		get { return this.TurnClock.fillAmount * this.scene.TurnLength; }
 		set { this.TurnClock.fillAmount = (1 * (value / this.scene.TurnLength)); }
 	}
-	private float LeftSceneSecs;
+    private float LeftSceneSecs { get { return this._leftSceneSecs; } set { this._leftSceneSecs = value < 0 ? 0 : value; } }
     private float Accuracy;
     private int MissCount;
 	private int TurnCount;
@@ -69,6 +70,11 @@ public class GameScreen : SpeedClickScreen {
 			this.Combo = 0;
 			this.HealthBar.value -= this.DecreaseHPAmount;
 		}
+
+        float PassedSecs = this.scene.SceneLength - this.LeftSceneSecs;
+        if (PassedSecs > 0)
+            this.Speed = this.TurnCount / PassedSecs * 60f;
+
 		this.LoadTarget();
 	}
 
@@ -96,6 +102,8 @@ public class GameScreen : SpeedClickScreen {
 
         this.SourceImagesPanelObject.LoadImages(this.scene.SourceImages);
 
+        this.Background.sprite = this.scene.GetBackground();
+
         this.LoadTarget();
         this.IsLoaded = true;
 	}
@@ -106,9 +114,6 @@ public class GameScreen : SpeedClickScreen {
         this.LeftTurnSecs = this.scene.TurnLength; // Reset turn timer...
         if (this.TurnCount > 0)
             this.Accuracy = (float) (this.TurnCount - this.MissCount) / this.TurnCount * 100f;
-        float PassedSecs = this.scene.SceneLength - this.LeftSceneSecs;
-        if (PassedSecs > 0)
-            this.Speed = this.TurnCount / PassedSecs * 60f;
 		this.TurnCount++;
 		this.TargetImage.sprite = SpeedClickHelpers.GetRandom<Sprite>(scene.TargetImages);
         this.CurrentTargetIndex = SpeedClickHelpers.LastRandomIndex;
@@ -118,37 +123,71 @@ public class GameScreen : SpeedClickScreen {
 
 	void Update()
 	{
-        if (!IsLoaded || IsPaused) return;
-		if (this.DoCountDown)
-		{
-			this.HealthBar.value += (this.HealthBar.maxValue / 1.5f * Time.deltaTime); // 1.5 secs to fill progress bar
-			this.DoCountDown = this.HealthBar.value < this.HealthBar.maxValue;
-            if (!this.DoCountDown)
-                this.Interactable = true;
-			return;
+        if (!IsLoaded || IsPaused)
+            return;
+
+        if (this.IsWithinCountdownTime())
+            return;
+
+        UpdateRunData(); // like hp, turn time, scene time...
+
+        CheckGameOver();
+
+        CheckTurnEnd();
+
+        CheckSceneEnd();
+
+	}
+
+    private void CheckGameOver()
+    {
+        if (this.HealthBar.value <= 0)
+            this.Director.GameOver(30);
+    }
+
+    private void CheckTurnEnd()
+    {
+        int leftSceneSecs = Convert.ToInt32(Math.Ceiling(this.LeftSceneSecs));
+        int leftTurnSecs = Convert.ToInt32(Math.Ceiling(this.LeftTurnSecs));
+        this.SceneClock.text = String.Format("{0:0}:{1:00}", Mathf.Floor(leftSceneSecs / 60), leftSceneSecs % 60);
+
+        if (leftTurnSecs <= 0)
+        {
+            this.HealthBar.value -= this.DecreaseHPAmount;
+            this.Combo = 0;
+
+            this.LoadTarget();
         }
 
+    }
+
+    private void CheckSceneEnd()
+    {
         if (this.LeftSceneSecs <= 0)
         {
             this.IsLoaded = false;
             this.FinishScene();
-            return;
         }
+    }
 
-		this.LeftTurnSecs -= Time.deltaTime;
-		this.LeftSceneSecs -= Time.deltaTime;
-		this.HealthBar.value -= (this.DecreaseHPAmount / 3 * Time.deltaTime);
-		int leftSceneSecs = Convert.ToInt32(Math.Ceiling(this.LeftSceneSecs));
-		int leftTurnSecs = Convert.ToInt32(Math.Ceiling(this.LeftTurnSecs));
-		this.SceneClock.text = String.Format("{0:0}:{1:00}", Mathf.Floor(leftSceneSecs/60), leftSceneSecs % 60);
-		
-		if (leftTurnSecs <= 0)
-		{
-			this.HealthBar.value -= this.DecreaseHPAmount;
-			this.Combo = 0;
-			this.LoadTarget();
-		}
-	}
+    private void UpdateRunData()
+    {
+        this.LeftTurnSecs -= Time.deltaTime;
+        this.LeftSceneSecs -= Time.deltaTime;
+        this.HealthBar.value -= (this.DecreaseHPAmount / 3 * Time.deltaTime);
+    }
+
+    private bool IsWithinCountdownTime()
+    {
+        if (!this.DoCountDown)
+            return false;
+        this.HealthBar.value += (this.HealthBar.maxValue / 1.5f * Time.deltaTime); // 1.5 secs to fill progress bar
+        this.DoCountDown = this.HealthBar.value < this.HealthBar.maxValue;
+        if (!this.DoCountDown)
+            this.Interactable = true;
+        return true;
+
+    }
 
     private void FinishScene()
     {
@@ -189,7 +228,8 @@ public class GameScreen : SpeedClickScreen {
 
     public override void OnEscape()
     {
-        Director.Pause(30);
+        if (this.IsLoaded)
+            Director.Pause(30);
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PauseScreen : SpeedClickScreen {
 
@@ -7,7 +8,7 @@ public class PauseScreen : SpeedClickScreen {
 
     public override void OnEscape()
     {
-        director.Resume();
+        director.OnEscape();
     }
 
 }

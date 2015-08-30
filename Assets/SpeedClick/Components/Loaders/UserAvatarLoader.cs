@@ -22,7 +22,7 @@ public class UserAvatarLoader: MonoBehaviour
 
     public void Load(User user)
     {
-        StartCoroutine(server.LoadImageIntoSprite(user));
+        StartCoroutine(server.LoadImageIntoSprite(user.AvatarUrl, user.LoadSprite));
     }
 
     public void LoadAll()

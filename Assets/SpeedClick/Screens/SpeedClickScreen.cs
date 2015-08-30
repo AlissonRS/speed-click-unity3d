@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class SpeedClickScreen : MonoBehaviour {
 
     public Screens ScreenIndex;
     public Screens PreviousScreenIndex;
+
+    public Image Background;
 
 
 	public bool Interactable

@@ -10,7 +10,7 @@ using Boomlagoon.JSON;
 using System.Reflection;
 using Assets.SpeedClick.Core;
 
-public class Scene: BaseObject, ISpritable
+public class Scene: BaseObject, ISubject<Scene>
 {
 
 	public float HP; // How fast the HP decreases...
@@ -24,8 +24,12 @@ public class Scene: BaseObject, ISpritable
     public bool UseCustomTargetImages;
     public User Creator;
 
+    public Sprite Background;
+
     private List<Sprite> _sourceImages = new List<Sprite>();
     private List<Sprite> _targetImages = new List<Sprite>();
+
+    private IList<IObserver<Scene>> _observers;
 
 	public List<Sprite> SourceImages { get { return this._sourceImages; } }
 
@@ -46,8 +50,7 @@ public class Scene: BaseObject, ISpritable
 
 	public string GetProperties()
     {
-        int tic = this.TargetImageCount == 0 ? this.SourceImageCount : this.TargetImageCount;
-        return String.Format("SI {0} - TI {1} - HP {2}\nTL {3} - SL {4} - TC {5}", this.SourceImageCount, tic, this.HP, this.TurnLength, this.SceneLength, this.Turns);
+        return String.Format("SI {0} - TI {1} - HP {2}\nTL {3} - SL {4} - TC {5}", this.SourceImageCount, this.TargetImageCount, this.HP, this.TurnLength, this.SceneLength, this.Turns);
         //return String.Format("SourceImages: {0} - TargetImages: - HP: {1} - TurnLength: {2} - SceneLength: {3} - TurnCount: {4}", this.SourceImageCount, this.TargetImageCount, this.HP, this.TurnLength, this.SceneLength, this.Turns);
 	}
 
@@ -69,6 +72,13 @@ public class Scene: BaseObject, ISpritable
 	{
 		return 100;
 	}
+
+    public void LoadBackgroundSprite(Sprite sprite)
+    {
+        this.Background = sprite;
+        if (this.Background != null)
+            this.Notify();
+    }
 
     public void LoadSprite(Sprite sprite)
     {
@@ -99,9 +109,40 @@ public class Scene: BaseObject, ISpritable
     public string GetImageUrl()
     {
         if (this.SourceImageCount > this.SourceImages.Count) // If we don't have all the source images yet
-            return String.Format("scenes/source/{0}/{1}.png", this.ID.ToString("D8"), this.SourceImages.Count + 1);
+            return String.Format("scenes/{0}/source/{1}.png", this.ID.ToString("D8"), this.SourceImages.Count + 1);
         if (this.TargetImageCount > this.TargetImages.Count) // If we don't have all the source images yet
-            return String.Format("scenes/target/{0}/{1}.png", this.ID.ToString("D8"), this.TargetImages.Count + 1);
+            return String.Format("scenes/{0}/target/{1}.png", this.ID.ToString("D8"), this.TargetImages.Count + 1);
         return "";
+    }
+
+
+    public Sprite GetBackground()
+    {
+        if (this.Background == null)
+            StartCoroutine(ServerManager.instance.LoadImageIntoSprite(String.Format("scenes/{0}/bg.jpg", this.ID.ToString("D8")), this.LoadBackgroundSprite));
+        return this.Background;
+    }
+
+    public IList<IObserver<Scene>> Observers
+    {
+        get { return _observers ?? (_observers = new List<IObserver<Scene>>()); }
+    }
+
+    public void Subscribe(IObserver<Scene> observer)
+    {
+        observer.Element = this;
+        Observers.Add(observer);
+    }
+
+    public void Unsubscribe(IObserver<Scene> observer)
+    {
+        observer.Element = null;
+        Observers.Remove(observer);
+    }
+
+    public void Notify()
+    {
+        foreach (var vo in Observers)
+            vo.ReceiveSubjectNotification(this);
     }
 }

@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Alisson.Core;
+using Assets.SpeedClick.Core;
 
-public class SceneSelectionController : MonoBehaviour {
+public class SceneSelectionController : MonoBehaviour, IObserver<Scene> {
 
     public static SceneSelectionController instance;
 
     public SceneDetailsPanel ScenePanel;
     public RankingPanel Ranking;
+    public ScenesScreen screen;
     public int SelectedSceneID;
 
     void Awake()
@@ -42,12 +45,14 @@ public class SceneSelectionController : MonoBehaviour {
         this.ScenePanel.Properties.text = scene.GetProperties();
         this.ScenePanel.Author.text = "Criada por " + user.Login;
         this.ScenePanel.Instructions.text = scene.Instructions;
+        scene.Subscribe(instance);
+        instance.screen.Background.sprite = scene.GetBackground() ?? instance.screen.Background.sprite;
         yield return StartCoroutine(this.Ranking.SetScene(scene));
     }
 
     public void OpenScene(Scene scene)
     {
-        if (scene.SourceImages.Count == 0) // If there are no images loaded, send user to Loading page while images are downloaded...
+        if (scene.SourceImages.Count < scene.SourceImageCount || (scene.UseCustomTargetImages && scene.TargetImages.Count < scene.TargetImageCount )) // If there are no images loaded, send user to Loading page while images are downloaded...
         {
             LoadingScreen scr = (LoadingScreen)SpeedClickDirector.instance.GetScreen(Screens.LoadingScreen);
             scr.scene = scene;
@@ -95,4 +100,22 @@ public class SceneSelectionController : MonoBehaviour {
     //			_images.Add(Sprite.Create(www.texture, new Rect(0,0,www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)));
     //		}
     //	}
+
+    public void ReceiveSubjectNotification(Scene scene)
+    {
+        if (SceneSelectionController.instance.SelectedSceneID == scene.ID)
+            this.screen.Background.sprite = scene.Background;
+    }
+
+    public Scene Element
+    {
+        get
+        {
+            return BaseRepository.getById<Scene>(this.SelectedSceneID);
+        }
+        set
+        {
+            this.SelectedSceneID = value.ID;
+        }
+    }
 }

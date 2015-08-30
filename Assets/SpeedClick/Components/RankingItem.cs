@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using Alisson.Core;
+using UnityEngine.EventSystems;
 
 public class RankingItem : MonoBehaviour, IObserver<User>
 {
@@ -10,6 +11,8 @@ public class RankingItem : MonoBehaviour, IObserver<User>
 	public Text Nick;
     public Text Score;
     public Text FullCombo;
+    public Score score;
+    public Scene scene;
 
     public User Element { get; set; }
 
@@ -24,5 +27,12 @@ public class RankingItem : MonoBehaviour, IObserver<User>
         this.Element.Unsubscribe(this);
     }
 
+    public void Load()
+    {
+        ScoreScreen scr = (ScoreScreen)SpeedClickDirector.instance.GetScreen(Screens.ScoreScreen);
+        scr.score = this.score;
+        scr.scene = this.scene;
+        SpeedClickDirector.instance.ShowScreen(scr, true);
+    }
 }
 

@@ -22,5 +22,11 @@ public class SceneDetailsPanel : MonoBehaviour
         this.alpha = 0;
     }
 
+    public void Expand()
+    {
+        //RectTransform rect = (this.gameObject.transform as RectTransform);
+        //rect.TransformVector();
+    }
+
 }
 
