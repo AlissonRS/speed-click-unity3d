@@ -5,7 +5,6 @@ using Alisson.Core;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using Alisson.Core.Encryption;
 using Assets.SpeedClick.Core;
 
 public class LoginCommand : Command
@@ -26,7 +25,7 @@ public class LoginCommand : Command
 		if (ServerManager.LoggedUserID > 0)
         {
             UserPanel.Login();
-            UserPanel.Show();
+            UserPanel.instance.Show();
             SpeedClickDirector.instance.ShowScreenByType(Screens.MainScreen);
         }
 		btn.interactable = true;

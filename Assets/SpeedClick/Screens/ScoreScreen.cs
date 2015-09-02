@@ -23,8 +23,17 @@ public class ScoreScreen : SpeedClickScreen {
     public Text SceneName;
     public Text PlayedBy;
 
+    public bool IsNewPlay;
+
+    public UserPanel panel;
+
     public override void LoadScreen()
     {
+
+        User player = BaseRepository.getById<User>(this.score.PlayerId);
+        this.panel.LoadData(player);
+        this.panel.Show();
+
         this.SceneName.text = this.scene.Title;
         this.Accuracy.text = String.Format(Constants.ACCURACY_FORMAT, this.score.Accuracy);
         this.MaxCombo.text = String.Format("{0}", this.score.MaxCombo);
@@ -33,16 +42,21 @@ public class ScoreScreen : SpeedClickScreen {
         this.Speed.text = String.Format(Constants.SPEED_FORMAT, this.score.Speed);
         this.TurnCount.text = String.Format("{0}", this.score.TurnCount);
 
-        if (this.score.PlayerId == 0)
+        if (this.IsNewPlay)
         {
-            this.Ranking.text = "Necessário Logar para enviar...";
-            this.PlayedBy.text = "Jogado por Anônimo";
+            if (this.score.PlayerId > 0)
+                StartCoroutine(this.SendScore());
+
+            else if (this.score.PlayerId == 0)
+            {
+                this.PlayedBy.text = "Jogado por Anônimo";
+                this.Ranking.text = "Necessário Logar para enviar...";
+            }
         }
         else
         {
-            StartCoroutine(this.SendScore());
-            User player = BaseRepository.getById<User>(this.score.PlayerId);
             this.PlayedBy.text = "Jogado por " + player.Login;
+            this.Ranking.text = String.Format("#{0}", this.score.Ranking);
         }
 
     }
@@ -51,7 +65,7 @@ public class ScoreScreen : SpeedClickScreen {
     {
         this.score.Platform = SpeedClickHelpers.ConvertPlatformType(Application.platform);
         this.Ranking.text = "Submetendo pontuação...";
-        yield return StartCoroutine(server.SendScore(this.score));
+        yield return StartCoroutine(server.SendScore(this.score)); // Wait for a response from server...
         this.PreencheRanking();
     }
 

@@ -24,5 +24,10 @@ public class MainScreen : SpeedClickScreen
 
 	}
 
+    public override void OnEscape()
+    {
+        Application.Quit();
+    }
+
 }
 

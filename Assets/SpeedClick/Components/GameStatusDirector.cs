@@ -36,7 +36,7 @@ public class GameStatusDirector: MonoBehaviour
         this.IsGameOver = false;
         this.Continuar.gameObject.SetActive(true);
         this.Title.text = "Jogo Pausado!";
-        UserPanel.Show();
+        UserPanel.instance.Show();
 		this.screen.IsPaused = true;
         SpeedClickDirector.instance.ShowScreen(Screens.PauseScreen, false);
 		screen.Fade(fadePercent / 100f);
@@ -47,7 +47,7 @@ public class GameStatusDirector: MonoBehaviour
         this.Continuar.gameObject.SetActive(false);
         this.IsGameOver = true;
         this.Title.text = "Você Falhou!";
-        UserPanel.Show();
+        UserPanel.instance.Show();
         this.screen.IsPaused = true;
         SpeedClickDirector.instance.ShowScreen(Screens.PauseScreen, false);
         screen.Fade(fadePercent / 100f);

@@ -105,6 +105,7 @@ public static class SpeedClickHelpers
 
     public static string GetDomainURL()
     {
+        return "http://52.25.19.44/";
         switch (Application.platform)
         {
             case RuntimePlatform.WindowsWebPlayer:
@@ -121,10 +122,7 @@ public static class SpeedClickHelpers
 
     public static string GetImagesURL()
     {
-        if (Application.isMobilePlatform)
-            return "file:///c:/inetpub/wwwroot/si/speedclick/img/";
-        else
-            return String.Concat(GetDomainURL(), "speedclick/img/");
+        return String.Concat(GetApiURL(), "img/");
     }
 
 
@@ -138,7 +136,7 @@ public static class SpeedClickHelpers
             height--;
         if (width == texture.width && height == texture.height)
             return;
-        texture.Resize(width, height, TextureFormat.DXT5, false);
+        texture.Resize(width, height, TextureFormat.DXT1, false);
         texture.Apply(true);
     }
 

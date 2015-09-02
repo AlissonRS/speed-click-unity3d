@@ -39,5 +39,17 @@ public class ButtonStateRestoreHandler : MonoBehaviour, IPointerClickHandler
 			this.defaultTextColor = this.buttonText.color;
 	}
 
+    public void OnGUI()
+    {
+        if (Event.current.type == EventType.KeyUp)
+        {
+            switch (Event.current.keyCode)
+            {
+                case KeyCode.Escape: this.ResetProperties(); break;
+                default: break;
+            }
+        }
+    }
+
 }
 

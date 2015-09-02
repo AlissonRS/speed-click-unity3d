@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.UI;
 using Alisson.Core;
-using Alisson.Core.Encryption;
 using System.Text;
 
 public class RegisterUserCommand : Command {
@@ -37,7 +36,7 @@ public class RegisterUserCommand : Command {
 		if (ServerManager.LoggedUserID > 0)
         {
             UserPanel.Login();
-            UserPanel.Show();
+            UserPanel.instance.Show();
             SpeedClickDirector.instance.ShowScreenByType(Screens.MainScreen);
         }
 		btn.interactable = true;

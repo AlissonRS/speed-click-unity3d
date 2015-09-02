@@ -32,6 +32,7 @@ public class RankingItem : MonoBehaviour, IObserver<User>
         ScoreScreen scr = (ScoreScreen)SpeedClickDirector.instance.GetScreen(Screens.ScoreScreen);
         scr.score = this.score;
         scr.scene = this.scene;
+        scr.IsNewPlay = false;
         SpeedClickDirector.instance.ShowScreen(scr, true);
     }
 }

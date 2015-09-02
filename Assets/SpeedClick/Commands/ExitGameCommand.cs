@@ -7,8 +7,7 @@ public class ExitGameCommand : Command {
 
 	public override IEnumerator ExecuteAsCoroutine()
 	{
-		if (!GetUserConfirmation || Application.isMobilePlatform)
-			Application.Quit();
+		Application.Quit();
 		yield return null;
 	}
 

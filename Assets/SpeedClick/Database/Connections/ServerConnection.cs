@@ -11,32 +11,31 @@ namespace Alisson.Core.Database.Connections
 	public class ServerConnection: Connection
 	{
 
-		protected string controller = "";
-		protected string method = "";
-
         public override IEnumerator LoadImageIntoTexture(string file)
         {
             string url = String.Concat(SpeedClickHelpers.GetImagesURL(), file);
-            Texture2D texture = new Texture2D(1, 1, TextureFormat.DXT5Crunched, false);
-            WWW www = new WWW(url);
-            yield return www;
-
-            www.LoadImageIntoTexture(texture);
-
-            this.response = new ResponseData();
-            if (!String.IsNullOrEmpty(www.error))
+            Texture2D texture = new Texture2D(1, 1, TextureFormat.ETC2_RGBA8, false);
+            using( WWW www = new WWW(url))
             {
-                this.response.Message = "Não foi possível acessar a imagem!";
-                yield break;
-            }
-            if (www.size <= 2)
-                yield break;
-            else
-            {
-                //SpeedClickHelpers.MakeTextureMultipleOfFour(texture);
-                this.response.DownloadedSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                this.response.Message = "";
-                this.response.Success = true;
+                yield return www;
+
+                www.LoadImageIntoTexture(texture);
+
+                this.response = new ResponseData();
+                if (!String.IsNullOrEmpty(www.error))
+                {
+                    this.response.Message = "Não foi possível acessar a imagem!";
+                    yield break;
+                }
+                if (www.size <= 2)
+                    yield break;
+                else
+                {
+                    //SpeedClickHelpers.MakeTextureMultipleOfFour(texture);
+                    this.response.DownloadedSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                    this.response.Message = "";
+                    this.response.Success = true;
+                }
             }
 
         }
@@ -81,6 +80,7 @@ namespace Alisson.Core.Database.Connections
 				this.response.Message = json.GetString("Message");
 				this.response.Success = json.GetBoolean("Success");
 			}
+            www.Dispose();
 		}
 
 		public override IEnumerator GetAll(string model)

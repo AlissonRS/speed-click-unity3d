@@ -109,9 +109,9 @@ public class Scene: BaseObject, ISubject<Scene>
     public string GetImageUrl()
     {
         if (this.SourceImageCount > this.SourceImages.Count) // If we don't have all the source images yet
-            return String.Format("scenes/{0}/source/{1}.png", this.ID.ToString("D8"), this.SourceImages.Count + 1);
+            return String.Format("scenes/{0}/source/{1}", this.ID, this.SourceImages.Count + 1);
         if (this.TargetImageCount > this.TargetImages.Count) // If we don't have all the source images yet
-            return String.Format("scenes/{0}/target/{1}.png", this.ID.ToString("D8"), this.TargetImages.Count + 1);
+            return String.Format("scenes/{0}/target/{1}", this.ID, this.TargetImages.Count + 1);
         return "";
     }
 
@@ -119,7 +119,7 @@ public class Scene: BaseObject, ISubject<Scene>
     public Sprite GetBackground()
     {
         if (this.Background == null)
-            StartCoroutine(ServerManager.instance.LoadImageIntoSprite(String.Format("scenes/{0}/bg.jpg", this.ID.ToString("D8")), this.LoadBackgroundSprite));
+            StartCoroutine(ServerManager.instance.LoadImageIntoSprite(String.Format("scenes/{0}/bg", this.ID), this.LoadBackgroundSprite));
         return this.Background;
     }
 

@@ -80,7 +80,7 @@ public class GameScreen : SpeedClickScreen {
 
 	public override void LoadScreen()
 	{
-        UserPanel.Hide();
+        UserPanel.instance.Hide();
 		if(this.IsPaused)
             return;
         this.Interactable = false;
@@ -211,7 +211,8 @@ public class GameScreen : SpeedClickScreen {
         ScoreScreen scr = (ScoreScreen)SpeedClickDirector.instance.GetScreen(Screens.ScoreScreen);
         scr.score = score;
         scr.scene = this.scene;
-        UserPanel.Show();
+        scr.IsNewPlay = true;
+        UserPanel.instance.Show();
         SpeedClickDirector.instance.ShowScreen(scr, true);
     }
 

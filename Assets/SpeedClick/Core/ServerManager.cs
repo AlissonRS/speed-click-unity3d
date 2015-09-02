@@ -5,7 +5,6 @@ using Alisson.Core.Database;
 using Alisson.Core.Database.Connections;
 using Boomlagoon.JSON;
 using System;
-using Alisson.Core.Encryption;
 using Assets.SpeedClick.Core;
 
 namespace Alisson.Core
@@ -46,7 +45,7 @@ namespace Alisson.Core
 
         public IEnumerator LoadImageIntoSprite(string url, Action<Sprite> callback = null)
         {
-            if (url == "")
+            if (url.IsNullOrWhiteSpace())
                 yield break;
             yield return StartCoroutine(getConn(ConnectionType.ServerConn).LoadImageIntoTexture(url));
             ResponseData response = getConn(ConnectionType.ServerConn).response;
@@ -56,16 +55,14 @@ namespace Alisson.Core
 
 		public IEnumerator Login(string login, string password, HttpMethodType type)
 		{
-			string encrypted = StringCipher.Encrypt(password,StringCipher.SecretMessage);
 			Dictionary<string,object> p = new Dictionary<string, object>(){
 				{"login", login},
-				{"password", encrypted}
+				{"password", password}
 			};
 			yield return StartCoroutine(getConn(ConnectionType.ServerConn).SendRequest("user", type, p));
             ResponseData response = getConn(ConnectionType.ServerConn).response;
 			if (response.Success)
             {
-                User user = new User();
                 JSONValue value = response.Data;
                 ServerManager.LoggedUserID = BaseRepository.add<User>(value).ID;
             }

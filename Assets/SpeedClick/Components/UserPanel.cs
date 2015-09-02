@@ -9,56 +9,60 @@ public class UserPanel : MonoBehaviour, IObserver<User> {
 
     public static UserPanel instance;
 
-    private static CanvasGroup canvas;
+    private CanvasGroup canvas;
 
     public Image Avatar;
     public Text Nick;
     public Text Ranking;
     public Text Score;
+    public bool IsMainInstance;
     public User Element { get; set; }
-    private static float Alpha { get { return canvas.alpha; } set { canvas.alpha = value; } }
+    private float Alpha { get { return this.canvas.alpha; } set { this.canvas.alpha = value; } }
 
 	// Use this for initialization
 	void Start () {
-        if (instance == null)
+        if (instance == null && this.IsMainInstance)
             instance = this;
-        if (canvas == null)
-            canvas = this.GetComponent<CanvasGroup>();
-        canvas.alpha = 0;
+        if (this.canvas == null)
+            this.canvas = this.GetComponent<CanvasGroup>();
+        this.canvas.alpha = 0;
 	}
 
     public static void Login()
     {
-        instance.Element = BaseRepository.getById<User>(ServerManager.LoggedUserID);
-        instance.LoadData();
-        instance.Element.Subscribe(instance);
-        instance.Avatar.sprite = instance.Element.GetAvatar(); // If the user doesn't have the avatar atm, an "unknown" avatar will be placed at the panel, while the server tries to load the right avatar. If an Avatar is found, the user notifies all observer objects (including this panel) so they can take some action (eg. update an Image sprite)
+        instance.LoadData(BaseRepository.getById<User>(ServerManager.LoggedUserID));
     }
 
-    public static void Hide()
+    public void Hide()
     {
-        canvas.alpha = 0;
+        this.canvas.alpha = 0;
     }
 
-    public void LoadData()
+    public void LoadData(User user)
     {
-        instance.Nick.text = instance.Element.Login;
-        instance.Ranking.text = "#" + instance.Element.Ranking.ToString();
-        instance.Score.text = instance.Element.Score.ToString() + " pts.";
+        user.Subscribe(this);
+        this.Avatar.sprite = user.GetAvatar(); // If the user doesn't have the avatar atm, an "unknown" avatar will be placed at the panel, while the server tries to load the right avatar. If an Avatar is found, the user notifies all observer objects (including this panel) so they can take some action (eg. update an Image sprite)
+        this.LoadComponents(user);
     }
 
-    public static void Show()
+    private void LoadComponents(User user)
     {
-        if (instance.Element != null)
-            canvas.alpha = 1;
+        this.Nick.text = user.Login;
+        this.Ranking.text = "#" + user.Ranking.ToString();
+        this.Score.text = user.Score.ToString() + " pts.";
     }
 
+    public void Show()
+    {
+        if (this.Element != null)
+            this.canvas.alpha = 1;
+    }
 
     public void ReceiveSubjectNotification(User sub)
     {
-        instance.Element = sub;
-        instance.Avatar.sprite = sub.Avatar;
-        instance.LoadData();
+        this.Element = sub;
+        this.Avatar.sprite = sub.Avatar;
+        this.LoadComponents(this.Element);
     }
 
     void OnDestroy()
@@ -67,4 +71,8 @@ public class UserPanel : MonoBehaviour, IObserver<User> {
         this.Element.Unsubscribe(this);
     }
 
+    public int LoggedPlayerID()
+    {
+        return this.Element == null ? 0 : this.Element.ID;
+    }
 }
