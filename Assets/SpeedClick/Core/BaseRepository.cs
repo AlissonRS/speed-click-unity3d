@@ -70,6 +70,8 @@ namespace Assets.SpeedClick.Core
 
         public static IEnumerable<T> getAll<T>() where T : BaseObject
         {
+            if (instance == null)
+                return new List<T>();
             Type t = typeof(T);
             string repoName = t.Name + "Repository";
             Transform repo = instance.gameObject.transform.FindChild(repoName);
@@ -99,9 +101,7 @@ namespace Assets.SpeedClick.Core
         public static T getById<T>(int ID) where T : BaseObject
         {
             List<T> objs = getAll<T>().Where<T>(u => u.ID == ID).ToList();
-            if (objs.Count() >= 1)
-                return objs.First();
-            return null;
+            return objs.FirstOrDefault();
         }
     }
 

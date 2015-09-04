@@ -18,7 +18,6 @@ public class SpeedClickDirector : MonoBehaviour
 	void Start () {
         if (instance == null)
             instance = this;
-        GameObject.Find("btnExit").SetActive(Application.isMobilePlatform);
 		SpeedClickScreen[] scrs = GameObject.FindObjectsOfType<SpeedClickScreen>();
 		foreach (SpeedClickScreen scr in scrs) {
 			var rect = scr.gameObject.GetComponent<RectTransform>();

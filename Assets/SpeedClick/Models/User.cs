@@ -74,5 +74,14 @@ public class User : BaseObject, ISubject<User>//, ISpritable
             this.Notify();
     }
 
+    public virtual void DefineGameObjectName()
+    {
+        this.gameObject.name = String.Format("{0}_{1}_{2}", this.getTableName(), this.Login, this.ID);
+    }
+    public virtual void ParseObject(JSONValue json)
+    {
+        base.ParseObject(json);
+        this.Notify();
+    }
 }
 

@@ -8,4 +8,9 @@ using Assets.SpeedClick.Core;
 
 public class ScenesScreen : SpeedClickScreen {
 
+    public override void LoadScreen()
+    {
+        UserPanel.instance.Show();
+    }
+
 }

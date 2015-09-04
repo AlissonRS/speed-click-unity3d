@@ -66,6 +66,11 @@ public class SceneSelectionController : MonoBehaviour, IObserver<Scene> {
         }
     }
 
+    void OnDestroy()
+    {
+        if (this.Element != null)
+            this.Element.Unsubscribe(this);
+    }
 
     private void LoadLocalSourceImages()
     {

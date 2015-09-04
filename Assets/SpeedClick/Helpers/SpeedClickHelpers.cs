@@ -117,6 +117,8 @@ public static class SpeedClickHelpers
 
     public static string GetApiURL()
     {
+        if (Application.isEditor)
+            return String.Concat(GetDomainURL(), "speedclick/apitest/");
         return String.Concat(GetDomainURL(), "speedclick/api/");
     }
 

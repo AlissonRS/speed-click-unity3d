@@ -31,4 +31,5 @@ public class Score : BaseObject
     {
         return BaseRepository.getById<User>(this.PlayerId);
     }
+
 }

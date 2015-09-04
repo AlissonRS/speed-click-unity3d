@@ -91,11 +91,10 @@ namespace Alisson.Core
             if (response.Success)
             {
                 JSONValue value = response.Data;
-                if (value.Obj.GetBoolean("IsNewRecord"))
-                {
-                    score.ID = Convert.ToInt32(value.Obj.GetNumber("ID"));
-                    score.Ranking = Convert.ToInt32(value.Obj.GetNumber("Ranking"));
-                }
+                score.ID = Convert.ToInt32(value.Obj.GetNumber("ID"));
+                score.Ranking = Convert.ToInt32(value.Obj.GetNumber("Ranking"));
+                if (value.Obj.GetValue("Player") != null)
+                    score.GetUser().ParseObject(value.Obj.GetValue("Player"));
             }
             else
                 MessageDialogManager.ShowDialog(response.Message);

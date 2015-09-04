@@ -16,9 +16,14 @@ public class ButtonStateRestoreHandler : MonoBehaviour, IPointerClickHandler
         this.ResetProperties();
     }
 
+    void OnDisable()
+    {
+        this.ResetProperties();
+    }
+
 	public void OnPointerClick (PointerEventData eventData)
 	{
-		this.ResetProperties();
+        //this.ResetProperties();
 	}
 	
 	private void ResetProperties()

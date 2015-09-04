@@ -29,10 +29,15 @@ public class ScoreScreen : SpeedClickScreen {
 
     public override void LoadScreen()
     {
-
         User player = BaseRepository.getById<User>(this.score.PlayerId);
-        this.panel.LoadData(player);
-        this.panel.Show();
+        if (player != null)
+        {
+            this.panel.LoadData(player);
+            UserPanel.instance.Hide();
+            this.panel.Show();
+        }
+        else
+            this.panel.Hide();
 
         this.SceneName.text = this.scene.Title;
         this.Accuracy.text = String.Format(Constants.ACCURACY_FORMAT, this.score.Accuracy);

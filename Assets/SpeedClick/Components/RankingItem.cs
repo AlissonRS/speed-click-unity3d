@@ -24,7 +24,7 @@ public class RankingItem : MonoBehaviour, IObserver<User>
     void OnDestroy()
     {
         if (this.Element != null)
-        this.Element.Unsubscribe(this);
+            this.Element.Unsubscribe(this);
     }
 
     public void Load()
