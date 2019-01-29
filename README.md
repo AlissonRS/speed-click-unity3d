@@ -1,6 +1,6 @@
 # Speed Click - Unity 3D Client
 
-This is a simple 2D game which I developed when learning Unity 3D with some videos on youtube. It's far from completed xD
+This is a simple 2D game which I developed in 2013 when learning Unity 3D with some videos on youtube. It's far from completed xD
 
 You can create an account or play anonymously. In order to submit your scores, you need to be logged in.
 
